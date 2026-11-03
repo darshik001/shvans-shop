@@ -47,6 +47,11 @@ const Sidebar = () => {
       icon: FiLayers,
     },
     {
+      name: "Coupons",
+      path: "/admin/coupons",
+      icon: FiLayers,
+    },
+    {
       name: "Settings",
       path: "/admin/settings",
       icon: FiSettings,
@@ -81,9 +86,8 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-[#e9dfd9] bg-[#fffdfb] transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-[#e9dfd9] bg-[#fffdfb] transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Logo */}
         <div className="flex h-20 items-center gap-3 border-b border-[#eee5df] px-6">
@@ -116,10 +120,9 @@ const Sidebar = () => {
                 to={item.path}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-[#211a18] text-white shadow-md"
-                      : "text-[#74645c] hover:bg-[#f5ede8] hover:text-[#211a18]"
+                  `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${isActive
+                    ? "bg-[#211a18] text-white shadow-md"
+                    : "text-[#74645c] hover:bg-[#f5ede8] hover:text-[#211a18]"
                   }`
                 }
               >
