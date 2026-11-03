@@ -17,6 +17,9 @@ import Shop from './page/Shop'
 import Profile from './page/Profile'
 import Cart from './page/Cart'
 import ProductDetails from './page/ProductDetails'
+import Coupons from './components/admin/coupons/Coupons'
+import CouponForm from './components/admin/coupons/CouponForm'
+import Settings from './components/admin/Settings'
 
 function App() {
 
@@ -46,6 +49,9 @@ function App() {
             <Route path="product-form" element={<ProductForm />} />
             <Route path="categories" element={<Categories />} />
             <Route path="categorie-from" element={<CategoryForm />} />
+            <Route path="coupons" element={<Coupons />} />
+            <Route path="coupon-form" element={<CouponForm />} />
+            <Route path="settings" element={<Settings />} />
 
           </Route>
         </Route>

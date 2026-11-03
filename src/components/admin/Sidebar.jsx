@@ -14,6 +14,7 @@ import {
   FiX,
   FiHexagon,
 } from "react-icons/fi";
+import { AdminLogout } from "../../toolkit/slices/admin/adminAuth";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,11 +38,6 @@ const Sidebar = () => {
       icon: FiShoppingCart,
     },
     {
-      name: "Customers",
-      path: "/admin/users",
-      icon: FiUsers,
-    },
-    {
       name: "Categories",
       path: "/admin/categories",
       icon: FiLayers,
@@ -60,7 +56,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     // અહીં તારા Redux logout action ને dispatch કરજે
-    // dispatch(adminLogout());
+    dispatch(AdminLogout());
 
     navigate("/admin", { replace: true });
     setIsOpen(false);

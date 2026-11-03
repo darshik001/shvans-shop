@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FiPlus,
@@ -7,47 +7,14 @@ import {
   FiTag,
   FiSearch,
 } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCouponMessages, DeleteCoupone } from "../../../toolkit/slices/admin/coupon";
+import { toast } from "react-toastify";
 
 const Coupons = () => {
   const navigate = useNavigate();
-
-  // Dummy Coupons
-  const [coupons] = useState([
-    {
-      _id: "1",
-      couponCode: "WELCOME10",
-      summary: "Welcome discount",
-      description: "Get 10% discount on your first order",
-      value: 10,
-      value_type: "percentage",
-      cart_value: 500,
-      limit: 100,
-      status: "active",
-    },
-    {
-      _id: "2",
-      couponCode: "SAVE200",
-      summary: "Flat discount",
-      description: "Get flat 200 rupees discount",
-      value: 200,
-      value_type: "fixed_amount",
-      cart_value: 1000,
-      limit: 50,
-      status: "active",
-    },
-    {
-      _id: "3",
-      couponCode: "FESTIVE15",
-      summary: "Festive offer",
-      description: "Get 15% discount on your order",
-      value: 15,
-      value_type: "percentage",
-      cart_value: 800,
-      limit: 200,
-      status: "inactive",
-    },
-  ]);
-
+  const { coupons, success, ErrMeesage, SuccessMessage } = useSelector((state) => state.AdminCoupons);
+  const dispatch = useDispatch();
   const [search, setSearch] = useState("");
 
   // Add Coupon
@@ -69,8 +36,26 @@ const Coupons = () => {
 
   // Delete Coupon
   const handleDelete = (coupon) => {
+    dispatch(DeleteCoupone(coupon._id));
     console.log("delete this coupon", coupon);
   };
+
+  useEffect(() => {
+    if (success) {
+      navigate("/admin/coupons");
+      dispatch(clearCouponMessages());
+    }
+
+    if (ErrMeesage) {
+      toast.error(ErrMeesage);
+      dispatch(clearCouponMessages());
+    }
+
+    if (SuccessMessage) {
+      toast.success(SuccessMessage);
+      dispatch(clearCouponMessages());
+    }
+  }, [success, ErrMeesage, SuccessMessage]);
 
   const filteredCoupons = coupons.filter((coupon) =>
     coupon.couponCode.toLowerCase().includes(search.toLowerCase())
@@ -191,11 +176,10 @@ const Coupons = () => {
                     {/* Status */}
                     <td className="px-5 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          coupon.status === "active"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-600"
-                        }`}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${coupon.status === "active"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-600"
+                          }`}
                       >
                         {coupon.status}
                       </span>

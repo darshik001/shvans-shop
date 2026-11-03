@@ -1,17 +1,23 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./admin/Sidebar";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearCategoryMessages, GetCategory } from "../toolkit/slices/admin/categories";
 import { GetProduct } from "../toolkit/slices/admin/products";
+import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
 
 const AdminLayout = () => {
-const dispatch = useDispatch()
-   useEffect(()=>{
-        dispatch(GetCategory())
-        dispatch(GetProduct())
-        clearCategoryMessages()
-      },[])
+  const dispatch = useDispatch()
+  const { isLogin, AccessToken } = useSelector((state) => state.adminAuth)
+  console.log(isLogin)
+  useEffect(() => {
+    if (isLogin && AccessToken) {
+      dispatch(GetCategory())
+      dispatch(GetProduct())
+      dispatch(GetAllCoupons())
+      clearCategoryMessages()
+    }
+  }, [isLogin, AccessToken, dispatch])
   return (
     <div className="flex min-h-screen w-full bg-[#faf8f6]">
       {/* Sidebar - Left Side */}

@@ -14,13 +14,28 @@ export const AdminSignin = createAsyncThunk(
             console.log(data)
             const deviceToken = await getDeviceToken()
             const resposn = await axios.post(`${APIURL}/admin/auth/admin-login`, { ...data, deviceToken })
-            console.log(resposn.data)
             return resposn.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
     }
 )
+
+
+export const AdminLogout = createAsyncThunk(
+    "adminauth/logout",
+    async (_, { rejectWithValue, getState }) => {
+        try {
+            const { AccessToken } = getState().adminAuth;
+            const resposn = await axios.post(`${APIURL}/admin/auth/admin-logout`, {}, { headers: { Authorization: `Bearer ${AccessToken}` } });
+
+            return resposn.data;
+        } catch (error) {
+
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 const adminAuthSlice = createSlice({
     name: "adminauth",
@@ -57,6 +72,28 @@ const adminAuthSlice = createSlice({
             })
 
             .addCase(AdminSignin.rejected, (state, action) => {
+                state.isLoding = false,
+                    state.errMessage = action.payload.message,
+                    state.isLogin = false,
+                    state.admin = null,
+                    state.AccessToken = null
+            })
+
+            .addCase(AdminLogout.pending, (state) => {
+                state.isLoding = true,
+                    state.errMessage = "",
+                    state.successMessage = ""
+            })
+
+            .addCase(AdminLogout.fulfilled, (state) => {
+                sessionStorage.removeItem('admin');
+                sessionStorage.removeItem('token');
+                state.admin = null;
+                state.AccessToken = null;
+                state.isLogin = false;
+            })
+
+            .addCase(AdminLogout.rejected, (state, action) => {
                 state.isLoding = false,
                     state.errMessage = action.payload.message,
                     state.isLogin = false,

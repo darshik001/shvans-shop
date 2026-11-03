@@ -58,6 +58,7 @@ export const UpdateProduct = createAsyncThunk(
         fromData.append("additionalInfo", data.additionalInfo);
         fromData.append("variants", JSON.stringify(data.variants));
         fromData.append("packing", JSON.stringify(data.packing));
+        fromData.append("status", data.status);
         if (data.newImages) {
             data.newImages.forEach((image) => {
                 fromData.append("productImages", image);
