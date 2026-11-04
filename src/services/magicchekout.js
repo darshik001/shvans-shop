@@ -75,11 +75,11 @@ export const razorpayMagickchekout = async (carts, navigate) => {
             replace: true,
           });
 
-          return{message:verifyResponse.message}
+          return { message: verifyResponse.message }
         }
 
-        if(verifyResponse.error){
-          return {error:verifyResponse.error || "Payment verification failed"}
+        if (verifyResponse.error) {
+          return { error: verifyResponse.error || "Payment verification failed" }
         }
       },
     };
@@ -89,16 +89,12 @@ export const razorpayMagickchekout = async (carts, navigate) => {
 
     razorpay.on("payment.failed", function (response) {
       console.log("Payment Failed:", response.error);
-
-      alert(
-        response.error?.description ||
-        "Payment failed. Please try again."
-      );
+      return { error: response.error?.description || "Payment failed. Please try again." }
     });
 
     razorpay.open();
 
-    return { success: true };
+
 
   } catch (error) {
     console.log("Magic Checkout Error:", error);

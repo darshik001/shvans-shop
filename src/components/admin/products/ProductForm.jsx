@@ -1,4 +1,4 @@
-
+﻿
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -74,6 +74,7 @@ const ProductForm = () => {
       variants:
         product.variants?.length > 0
           ? product.variants.map((variant) => ({
+            ...(variant._id ? { _id: variant._id } : {}),
             price: variant.price ?? "",
             stock: variant.stock ?? 0,
             unit: variant.unit || "",
@@ -207,6 +208,7 @@ const ProductForm = () => {
       ...formData,
 
       variants: formData.variants.map((variant) => ({
+        ...(variant._id ? { _id: variant._id } : {}),
         price: Number(variant.price),
         stock: Number(variant.stock),
         unit: variant.unit,
