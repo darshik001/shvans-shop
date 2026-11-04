@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ClearCarts } from "../toolkit/slices/user/carts";
 
 const razorpayPaymentOrder = async (carts) => {
   try {
@@ -26,7 +27,7 @@ const razorpayPaymentVerify = async (razorpay_order_id, razorpay_payment_id, raz
 
 
 
-export const razorpayMagickchekout = async (carts, navigate) => {
+export const razorpayMagickchekout = async (carts, navigate,dispatch) => {
   try {
     // Create Razorpay Order
     const paymentOrder = await razorpayPaymentOrder(carts);
@@ -68,6 +69,7 @@ export const razorpayMagickchekout = async (carts, navigate) => {
 
         // Payment Verified
         if (verifyResponse.success && verifyResponse.order) {
+          dispatch(ClearCarts())
           navigate("/order-success", {
             state: {
               order: verifyResponse.order,

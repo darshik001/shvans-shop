@@ -11,7 +11,9 @@ import {
     FiDownload,
     FiCheck,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AcceptOrders, ClearOrdersmessage } from "../../toolkit/slices/admin/adminOrder";
+import { toast } from "react-toastify";
 
 const tabs = [
     { label: "Pending", value: "pending", icon: FiClock },
@@ -32,16 +34,13 @@ const OrderList = ({
     onViewOrder,
     onAcceptOrders,
     onDownloadLabels,
-    isAccepting = false,
 }) => {
     const [activeTab, setActiveTab] = useState("pending");
     const [search, setSearch] = useState("");
     const [selectedOrders, setSelectedOrders] = useState([]);
 
-    const { orders = [], isLoading } = useSelector(
-        (state) => state.AdminOrder
-    );
-
+    const { orders = [], isLoading,ErrMessage,SuccessMessage } = useSelector((state) => state.AdminOrder);
+    const dispatch = useDispatch()
     // Tab change થાય ત્યારે selection clear કરો
     useEffect(() => {
         setSelectedOrders([]);
@@ -49,18 +48,12 @@ const OrderList = ({
 
     // Forward orders અને tab પ્રમાણે filtering
     const filteredOrders = useMemo(() => {
-        let result = Array.isArray(orders)
-            ? orders.filter((order) => order.type === "forward")
-            : [];
+        let result = Array.isArray(orders)? orders.filter((order) => order.type === "forward"): [];
 
         if (activeTab === "accepted") {
-            result = result.filter((order) =>
-                acceptedStatuses.includes(order.status)
-            );
+            result = result.filter((order) => acceptedStatuses.includes(order.status) );
         } else {
-            result = result.filter(
-                (order) => order.status === activeTab
-            );
+            result = result.filter((order) => order.status === activeTab);
         }
 
         if (search.trim()) {
@@ -113,11 +106,7 @@ const OrderList = ({
     };
 
     // Select all / unselect all
-    const isAllSelected =
-        filteredOrders.length > 0 &&
-        filteredOrders.every((order) =>
-            selectedOrders.includes(order._id)
-        );
+    const isAllSelected = filteredOrders.length > 0 && filteredOrders.every((order) => selectedOrders.includes(order._id) );
 
     const handleSelectAll = () => {
         if (isAllSelected) {
@@ -131,9 +120,12 @@ const OrderList = ({
 
     // Accept selected orders
     const handleAcceptOrders = () => {
-        if (selectedOrders.length === 0) return;
-
-        onAcceptOrders?.(selectedOrders);
+        if (selectedOrders.length === 0) {
+            toast.error("Order Not Selected")
+            return;
+        }
+        dispatch(AcceptOrders(selectedOrders))
+        
     };
 
     // Download selected accepted orders' labels
@@ -157,11 +149,19 @@ const OrderList = ({
         });
     };
 
-    const formatStatus = (status) =>
-        status
-            ?.replaceAll("_", " ")
-            .replace(/\b\w/g, (char) => char.toUpperCase());
+    const formatStatus = (status) => status ?.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
+
+    useEffect(()=>{
+     if(SuccessMessage){
+        toast.success(SuccessMessage)
+        dispatch(ClearOrdersmessage())
+     }
+     if(ErrMessage){
+        dispatch(ClearOrdersmessage())
+        toast.error(ErrMessage)
+     }
+    },[SuccessMessage,ErrMessage])
     return (
         <div className="w-full min-h-screen bg-[#faf8f6] p-4 sm:p-6">
 
@@ -187,8 +187,8 @@ const OrderList = ({
                                 key={tab.value}
                                 onClick={() => setActiveTab(tab.value)}
                                 className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition ${isActive
-                                        ? "border-[#a77b51] text-[#a77b51]"
-                                        : "border-transparent text-gray-500 hover:text-gray-800"
+                                    ? "border-[#a77b51] text-[#a77b51]"
+                                    : "border-transparent text-gray-500 hover:text-gray-800"
                                     }`}
                             >
                                 <Icon size={17} />
@@ -196,8 +196,8 @@ const OrderList = ({
 
                                 <span
                                     className={`rounded-full px-2 py-0.5 text-xs ${isActive
-                                            ? "bg-[#f1e6dc] text-[#906843]"
-                                            : "bg-gray-100 text-gray-600"
+                                        ? "bg-[#f1e6dc] text-[#906843]"
+                                        : "bg-gray-100 text-gray-600"
                                         }`}
                                 >
                                     {getTabCount(tab.value)}
@@ -238,11 +238,11 @@ const OrderList = ({
                         selectedOrders.length > 0 && (
                             <button
                                 onClick={handleAcceptOrders}
-                                disabled={isAccepting}
+                                disabled={isLoading}
                                 className="flex items-center gap-2 rounded-lg bg-[#a77b51] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#906843] disabled:cursor-not-allowed disabled:opacity-60"
                             >
                                 <FiCheck size={17} />
-                                {isAccepting
+                                {isLoading
                                     ? "Accepting..."
                                     : `Accept Orders (${selectedOrders.length})`}
                             </button>

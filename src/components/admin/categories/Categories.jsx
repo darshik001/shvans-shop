@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 
 const Categories = () => {
     const navigate = useNavigate();
-    const {categories,isLoading} = useSelector((state)=>state.AdminCategories)
+    const { categories, isLoading } = useSelector((state) => state.AdminCategories)
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -49,13 +49,13 @@ const Categories = () => {
     };
 
     const handleEdit = (category) => {
-  navigate("/admin/categorie-from", {
-    state: {
-      isEdit: true,
-      category,
-    },
-  });
-};
+        navigate("/admin/category-form", {
+            state: {
+                isEdit: true,
+                category,
+            },
+        });
+    };
 
     const handleView = (category) => {
         setSelectedCategory(category);
@@ -68,7 +68,7 @@ const Categories = () => {
 
 
 
-   
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -188,8 +188,8 @@ const Categories = () => {
                                     <td className="px-5 py-4">
                                         <span
                                             className={`rounded-full px-3 py-1 text-xs font-semibold ${category.status === "active"
-                                                    ? "bg-green-50 text-green-700"
-                                                    : "bg-red-50 text-red-600"
+                                                ? "bg-green-50 text-green-700"
+                                                : "bg-red-50 text-red-600"
                                                 }`}
                                         >
                                             {category.status}

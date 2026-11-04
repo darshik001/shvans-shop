@@ -70,7 +70,7 @@ const ProductCard = ({
         </span>
 
         {/* Wishlist */}
-        <button
+        {/* <button
           type="button"
           aria-label={`Add ${product?.name} to wishlist`}
           onClick={(e) => {
@@ -80,7 +80,7 @@ const ProductCard = ({
           className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#30241f] transition hover:bg-[#30241f] hover:text-white"
         >
           <FiHeart />
-        </button>
+        </button> */}
       </Link>
 
       {/* Product Details */}

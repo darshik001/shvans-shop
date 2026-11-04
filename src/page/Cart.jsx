@@ -1,23 +1,23 @@
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
-import { ClearCarts, UpdateCartQuantity } from "../toolkit/slices/user/carts";
+import { UpdateCartQuantity } from "../toolkit/slices/user/carts";
 
 import { toast } from "react-toastify";
 import { razorpayMagickchekout } from "../services/magicchekout";
 
 const Cart = () => {
     const dispatch = useDispatch();
-const navigate  = useNavigate()
+    const navigate = useNavigate()
     const carts = useSelector((state) => state.carts.carts || []);
     const products = useSelector((state) => state.userProducts.products || []);
-    
+
     const isLoading = useSelector(
         (state) => state.carts.isLoading
     );
-    const [loading,setLoading] = useState(false) 
+    const [loading, setLoading] = useState(false)
 
     // Find product and variant details
     const cartItems = useMemo(() => {
@@ -124,15 +124,14 @@ const navigate  = useNavigate()
             return;
         }
 
-        let result = await razorpayMagickchekout(carts,navigate)
-        
+        let result = await razorpayMagickchekout(carts, navigate, dispatch)
+
         if (result.error) {
             setLoading(false)
             toast.error(result.error)
             return
-        }else{
+        } else {
             setLoading(false)
-            dispatch(ClearCarts())
             toast.success(result.message)
             return
         }
@@ -336,13 +335,13 @@ const navigate  = useNavigate()
 
                             <button
                                 type="button"
-                                disabled = {loading}
+                                disabled={loading}
                                 onClick={() => {
                                     handaleCheckout();
                                 }}
                                 className="w-full mt-6 py-4 bg-[#a77b51] text-white text-sm tracking-[2px] hover:bg-[#8d6846] transition"
                             >
-                                {loading?"PROCEED TO CHECKOUT...":"PROCEED TO CHECKOUT"}
+                                {loading ? "PROCEED TO CHECKOUT..." : "PROCEED TO CHECKOUT"}
                             </button>
 
                             <p className="text-center text-xs text-[#9b8c80] mt-4">

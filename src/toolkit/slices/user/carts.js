@@ -148,15 +148,21 @@ export const UpdateCartQuantity = createAsyncThunk(
 
 export const ClearCarts = createAsyncThunk(
     'carts/clear',
-    async(_,{rejectWithValue,getState})=>{
+    async (_, { rejectWithValue, getState }) => {
         try {
-            const response = await axios.delete(`${APIURL}/user/cart/clear`, {}, { headers: { authorization: `Bearer ${getState().userAuth.AccessToken}` } });
-            return response.data
+            const { AccessToken, isLogin } = getState.userAuth
+            if (!isLogin) {
+                localStorage.removeItem('carts')
+            } else {
+                const response = await axios.delete(`${APIURL}/user/cart/clear`, {}, { headers: { authorization: `Bearer ${AccessToken}` } });
+                return response.data
+            }
+
         } catch (error) {
             return rejectWithValue(error.response?.data)
         }
     }
-) 
+)
 
 
 
@@ -261,21 +267,21 @@ const cartSlice = createSlice({
                 state.errMessage =
                     action.payload?.message || "Quantity update failed";
             })
-            .addCase(ClearCarts.pending,(state)=>{
+            .addCase(ClearCarts.pending, (state) => {
                 state.isLoading = true,
-                state.errMessage = "",
-                state.successMessage = ""
+                    state.errMessage = "",
+                    state.successMessage = ""
             })
-            .addCase(ClearCarts.fulfilled,(state,action)=>{
+            .addCase(ClearCarts.fulfilled, (state, action) => {
                 state.carts = [],
-                state.isLoading = false,
-                state.errMessage = ""
+                    state.isLoading = false,
+                    state.errMessage = ""
             })
 
-            .addCase(ClearCarts.rejected,(state,action)=>{
+            .addCase(ClearCarts.rejected, (state, action) => {
                 state.isLoading = false,
-                state.successMessage = "",
-                state.errMessage = ""
+                    state.successMessage = "",
+                    state.errMessage = ""
             })
 
 
