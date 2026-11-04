@@ -66,6 +66,7 @@ const adminAuthSlice = createSlice({
 
                 state.admin = action.payload.user
                 state.successMessage = action.payload.message,
+                    state.AccessToken = action.payload.AccessToken,
                     state.errMessage = "",
                     state.isLoding = false,
                     state.isLogin = true

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCategoryMessages, GetCategory } from "../toolkit/slices/admin/categories";
 import { GetProduct } from "../toolkit/slices/admin/products";
 import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
+import { GetAllOrders } from "../toolkit/slices/admin/adminOrder";
 
 const AdminLayout = () => {
   const dispatch = useDispatch()
@@ -15,6 +16,7 @@ const AdminLayout = () => {
       dispatch(GetCategory())
       dispatch(GetProduct())
       dispatch(GetAllCoupons())
+      dispatch(GetAllOrders())
       clearCategoryMessages()
     }
   }, [isLogin, AccessToken, dispatch])

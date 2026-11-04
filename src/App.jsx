@@ -20,6 +20,7 @@ import ProductDetails from './page/ProductDetails'
 import Coupons from './components/admin/coupons/Coupons'
 import CouponForm from './components/admin/coupons/CouponForm'
 import Settings from './components/admin/Settings'
+import OrderList from './components/admin/OrderList'
 
 function App() {
 
@@ -48,10 +49,12 @@ function App() {
             <Route path="products" element={<Products />} />
             <Route path="product-form" element={<ProductForm />} />
             <Route path="categories" element={<Categories />} />
-            <Route path="categorie-from" element={<CategoryForm />} />
+            <Route path="category-form" element={<CategoryForm />} />
             <Route path="coupons" element={<Coupons />} />
             <Route path="coupon-form" element={<CouponForm />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="orders" element={<OrderList />} />
+
 
           </Route>
         </Route>
