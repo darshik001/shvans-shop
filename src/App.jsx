@@ -21,6 +21,7 @@ import Coupons from './components/admin/coupons/Coupons'
 import CouponForm from './components/admin/coupons/CouponForm'
 import Settings from './components/admin/Settings'
 import OrderList from './components/admin/OrderList'
+import OrderSuccess from './page/OrderSuccess'
 
 function App() {
 
@@ -38,6 +39,8 @@ function App() {
           <Route path="shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="order-success" element={<OrderSuccess />} />
+
         </Route>
 
         {/* ADMIN ROUTES */}

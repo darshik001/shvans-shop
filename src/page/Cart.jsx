@@ -1,7 +1,7 @@
 
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
 import { UpdateCartQuantity } from "../toolkit/slices/user/carts";
 
@@ -10,7 +10,7 @@ import { razorpayMagickchekout } from "../services/magicchekout";
 
 const Cart = () => {
     const dispatch = useDispatch();
-
+const navigate  = useNavigate()
     const carts = useSelector((state) => state.carts.carts || []);
     const products = useSelector((state) => state.userProducts.products || []);
 
@@ -122,10 +122,12 @@ const Cart = () => {
             return;
         }
 
-        let result = await razorpayMagickchekout(carts)
+        let result = await razorpayMagickchekout(carts,navigate)
         if (result.error) {
             toast.error(result.error)
             return
+        }else{
+            toast.success(result.message)
         }
     }
 
