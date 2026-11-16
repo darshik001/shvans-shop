@@ -25,7 +25,7 @@ import {
   userLogout,
 } from "../toolkit/slices/user/userAuth";
 import { useNavigate } from "react-router-dom";
-import { CanceleOrder, ReturnOrder } from "../toolkit/slices/user/userOrder";
+import { CanceleOrder, ClearUserOrdersmessage, ReturnOrder } from "../toolkit/slices/user/userOrder";
 
 const Profile = () => {
   const { user, errMessage, successMessage, isLogin, AccessToken } = useSelector((state) => state.userAuth);
@@ -64,10 +64,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      setProfileData({
-        name: user.name || "",
-        phone: user.phone || "",
-      });
+      setProfileData({ name: user.name || "", phone: user.phone || "", });
     }
 
     if (errMessage) {
@@ -83,14 +80,22 @@ const Profile = () => {
     if (!isLogin) {
       navigate("/auth");
     }
-  }, [
-    user,
-    errMessage,
-    successMessage,
-    isLogin,
-    dispatch,
-    navigate,
-  ]);
+  }, [user, errMessage, successMessage, isLogin, dispatch, navigate]);
+
+
+
+  useEffect(() => {
+    if (userOrderState.SuccessMessage) {
+      toast.success(userOrderState.SuccessMessage)
+      dispatch(ClearUserOrdersmessage())
+    }
+
+    if (userOrderState.ErrMessage) {
+      toast.error(userOrderState.ErrMessage)
+      dispatch(ClearUserOrdersmessage())
+
+    }
+  }, [dispatch, userOrderState.ErrMessage, userOrderState.SuccessMessage])
 
   // Profile input change
   const handleChange = (e) => {

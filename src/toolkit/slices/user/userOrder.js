@@ -63,7 +63,7 @@ const userOrderSlice = createSlice({
     },
     reducers: {
         ClearUserOrdersmessage: (state) => {
-            state.ErrMessage = "",
+                state.ErrMessage = "",
                 state.SuccessMessage = "",
                 state.isLoading = false
         }
@@ -114,6 +114,7 @@ const userOrderSlice = createSlice({
 
                 state.isLoading = false,
                     state.ErrMessage = "",
+                    state.SuccessMessage = action.payload.message
                     state.orders = state.orders = state.orders.map((order) => order._id === action.payload.order._id ? action.payload.order : order);
             })
             .addCase(ReturnOrder.rejected, (state, action) => {
