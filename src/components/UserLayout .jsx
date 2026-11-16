@@ -5,18 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetAllProducts } from "../toolkit/slices/user/products";
 import { AddToCart, GetCarts } from "../toolkit/slices/user/carts";
 import { useEffect } from "react";
+import { GetUserOrders } from "../toolkit/slices/user/userOrder";
 
 
 const UserLayout = () => {
   const { isLogin } = useSelector((state) => state.userAuth);
   const carts = JSON.parse(localStorage.getItem("carts")) || [];
 
-  console.log(carts)
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(GetAllProducts());
     dispatch(GetCarts());
+    dispatch(GetUserOrders())
   }, [dispatch, isLogin])
 
 

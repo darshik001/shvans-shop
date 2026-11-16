@@ -7,10 +7,13 @@ import products from "./admin/products"
 import userProducts from "./user/products";
 import carts from "./user/carts";
 import adminOrder from "./admin/adminOrder"
+import userOrder from "./user/userOrder"
+
 const rootReducer = combineReducers({
     userAuth: userAuth,
     userProducts: userProducts,
     carts: carts,
+    userOrder:userOrder,
     adminAuth: adminAuth,
     AdminCategories: categories,
     AdminProducts: products,

@@ -32,6 +32,21 @@ export const AcceptOrders = createAsyncThunk(
     }
 )
 
+
+export const DownloadLabels = createAsyncThunk(
+    'adminOrder/labels',
+    async (data, { rejectWithValue, getState }) => {
+        try {
+            const { AccessToken } = getState().adminAuth;
+            const resposn = await axios.post(`${APIURL}/admin/order/labels`, { shipmentIds: data }, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return resposn.data
+
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 const AdminOrderSlice = createSlice({
     name: 'adminOrders',
     initialState: {
@@ -78,6 +93,27 @@ const AdminOrderSlice = createSlice({
                 state.orders = action.payload.orders
             })
             .addCase(AcceptOrders.rejected,(state,action)=>{
+                state.isLoading = false,
+                state.ErrMessage = action.payload.message,
+                state.SuccessMessage=""
+            })
+
+
+
+            
+            .addCase(DownloadLabels.pending,(state)=>{
+                state.isLoading = true,
+                state.ErrMessage = "",
+                state.SuccessMessage=""
+            })
+
+            .addCase(DownloadLabels.fulfilled,(state,action)=>{
+                state.isLoading = false,
+                state.ErrMessage = "",
+                state.SuccessMessage=action.payload.message,
+                state.orders = action.payload.orders
+            })
+            .addCase(DownloadLabels.rejected,(state,action)=>{
                 state.isLoading = false,
                 state.ErrMessage = action.payload.message,
                 state.SuccessMessage=""

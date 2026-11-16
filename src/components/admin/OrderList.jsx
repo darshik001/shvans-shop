@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import {
     FiSearch,
@@ -12,7 +11,11 @@ import {
     FiCheck,
 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { AcceptOrders, ClearOrdersmessage } from "../../toolkit/slices/admin/adminOrder";
+import {
+    AcceptOrders,
+    ClearOrdersmessage,
+    DownloadLabels,
+} from "../../toolkit/slices/admin/adminOrder";
 import { toast } from "react-toastify";
 
 const tabs = [
@@ -23,39 +26,58 @@ const tabs = [
     { label: "Cancelled", value: "cancelled", icon: FiXCircle },
 ];
 
+// Accepted tab
 const acceptedStatuses = [
     "accepted",
     "processing",
+];
+
+// Pickup tab
+const pickupStatuses = [
     "shipped",
     "out_for_delivery",
 ];
 
-const OrderList = ({
-    onViewOrder,
-    onAcceptOrders,
-    onDownloadLabels,
-}) => {
+const OrderList = ({ onViewOrder }) => {
     const [activeTab, setActiveTab] = useState("pending");
     const [search, setSearch] = useState("");
     const [selectedOrders, setSelectedOrders] = useState([]);
 
-    const { orders = [], isLoading,ErrMessage,SuccessMessage } = useSelector((state) => state.AdminOrder);
-    const dispatch = useDispatch()
-    // Tab change થાય ત્યારે selection clear કરો
+    const {
+        orders = [],
+        isLoading,
+        ErrMessage,
+        SuccessMessage,
+    } = useSelector((state) => state.AdminOrder);
+
+    const dispatch = useDispatch();
+
+    // Clear selection when tab changes
     useEffect(() => {
         setSelectedOrders([]);
     }, [activeTab]);
 
-    // Forward orders અને tab પ્રમાણે filtering
+    // Filter orders
     const filteredOrders = useMemo(() => {
-        let result = Array.isArray(orders)? orders.filter((order) => order.type === "forward"): [];
+        let result = Array.isArray(orders)
+            ? orders.filter((order) => order.type === "forward")
+            : [];
 
         if (activeTab === "accepted") {
-            result = result.filter((order) => acceptedStatuses.includes(order.status) );
+            result = result.filter((order) =>
+                acceptedStatuses.includes(order.status)
+            );
+        } else if (activeTab === "pickup") {
+            result = result.filter((order) =>
+                pickupStatuses.includes(order.status)
+            );
         } else {
-            result = result.filter((order) => order.status === activeTab);
+            result = result.filter(
+                (order) => order.status === activeTab
+            );
         }
 
+        // Search
         if (search.trim()) {
             const searchValue = search.toLowerCase();
 
@@ -68,7 +90,9 @@ const OrderList = ({
                 ]
                     .filter(Boolean)
                     .some((value) =>
-                        String(value).toLowerCase().includes(searchValue)
+                        String(value)
+                            .toLowerCase()
+                            .includes(searchValue)
                     )
             );
         }
@@ -85,6 +109,12 @@ const OrderList = ({
         if (tab === "accepted") {
             return forwardOrders.filter((order) =>
                 acceptedStatuses.includes(order.status)
+            ).length;
+        }
+
+        if (tab === "pickup") {
+            return forwardOrders.filter((order) =>
+                pickupStatuses.includes(order.status)
             ).length;
         }
 
@@ -105,8 +135,12 @@ const OrderList = ({
         );
     };
 
-    // Select all / unselect all
-    const isAllSelected = filteredOrders.length > 0 && filteredOrders.every((order) => selectedOrders.includes(order._id) );
+    // Select all
+    const isAllSelected =
+        filteredOrders.length > 0 &&
+        filteredOrders.every((order) =>
+            selectedOrders.includes(order._id)
+        );
 
     const handleSelectAll = () => {
         if (isAllSelected) {
@@ -121,22 +155,31 @@ const OrderList = ({
     // Accept selected orders
     const handleAcceptOrders = () => {
         if (selectedOrders.length === 0) {
-            toast.error("Order Not Selected")
+            toast.error("Order Not Selected");
             return;
         }
-        dispatch(AcceptOrders(selectedOrders))
-        
+
+        dispatch(AcceptOrders(selectedOrders));
     };
 
-    // Download selected accepted orders' labels
+    // Download labels
     const handleDownloadLabels = () => {
         if (selectedOrders.length === 0) return;
 
-        const selectedOrderData = filteredOrders.filter((order) =>
-            selectedOrders.includes(order._id)
+        const selectedOrderData = filteredOrders.filter(
+            (order) => selectedOrders.includes(order._id)
         );
 
-        onDownloadLabels?.(selectedOrderData);
+        const shipmentIds = selectedOrderData
+            .map((item) => item.shipmentData?.shipment_id)
+            .filter(Boolean);
+
+        if (shipmentIds.length === 0) {
+            toast.error("Shipment IDs not found");
+            return;
+        }
+
+        dispatch(DownloadLabels(shipmentIds));
     };
 
     const formatDate = (date) => {
@@ -149,19 +192,24 @@ const OrderList = ({
         });
     };
 
-    const formatStatus = (status) => status ?.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    const formatStatus = (status) =>
+        status
+            ?.replaceAll("_", " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase());
 
+    // Success and Error messages
+    useEffect(() => {
+        if (SuccessMessage) {
+            toast.success(SuccessMessage);
+            dispatch(ClearOrdersmessage());
+        }
 
-    useEffect(()=>{
-     if(SuccessMessage){
-        toast.success(SuccessMessage)
-        dispatch(ClearOrdersmessage())
-     }
-     if(ErrMessage){
-        dispatch(ClearOrdersmessage())
-        toast.error(ErrMessage)
-     }
-    },[SuccessMessage,ErrMessage])
+        if (ErrMessage) {
+            toast.error(ErrMessage);
+            dispatch(ClearOrdersmessage());
+        }
+    }, [SuccessMessage, ErrMessage, dispatch]);
+
     return (
         <div className="w-full min-h-screen bg-[#faf8f6] p-4 sm:p-6">
 
@@ -187,8 +235,8 @@ const OrderList = ({
                                 key={tab.value}
                                 onClick={() => setActiveTab(tab.value)}
                                 className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition ${isActive
-                                    ? "border-[#a77b51] text-[#a77b51]"
-                                    : "border-transparent text-gray-500 hover:text-gray-800"
+                                        ? "border-[#a77b51] text-[#a77b51]"
+                                        : "border-transparent text-gray-500 hover:text-gray-800"
                                     }`}
                             >
                                 <Icon size={17} />
@@ -196,8 +244,8 @@ const OrderList = ({
 
                                 <span
                                     className={`rounded-full px-2 py-0.5 text-xs ${isActive
-                                        ? "bg-[#f1e6dc] text-[#906843]"
-                                        : "bg-gray-100 text-gray-600"
+                                            ? "bg-[#f1e6dc] text-[#906843]"
+                                            : "bg-gray-100 text-gray-600"
                                         }`}
                                 >
                                     {getTabCount(tab.value)}
@@ -208,7 +256,7 @@ const OrderList = ({
                 </div>
             </div>
 
-            {/* Search and Action Buttons */}
+            {/* Search and Actions */}
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
                 {/* Search */}
@@ -228,12 +276,11 @@ const OrderList = ({
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-
                     <p className="whitespace-nowrap text-sm text-gray-500">
                         {filteredOrders.length} Orders
                     </p>
 
-                    {/* Pending: Accept Button */}
+                    {/* Accept Button */}
                     {activeTab === "pending" &&
                         selectedOrders.length > 0 && (
                             <button
@@ -248,7 +295,7 @@ const OrderList = ({
                             </button>
                         )}
 
-                    {/* Accepted: Download Labels Button */}
+                    {/* Download Labels */}
                     {activeTab === "accepted" &&
                         selectedOrders.length > 0 && (
                             <button
@@ -270,7 +317,6 @@ const OrderList = ({
                         <thead className="bg-[#f8f5f2]">
                             <tr className="text-xs uppercase tracking-wide text-gray-500">
 
-                                {/* Checkbox only Pending and Accepted */}
                                 {canSelect && (
                                     <th className="w-12 px-5 py-4">
                                         <input
@@ -333,7 +379,6 @@ const OrderList = ({
                                         className="transition hover:bg-[#faf8f6]"
                                     >
 
-                                        {/* Individual checkbox */}
                                         {canSelect && (
                                             <td className="px-5 py-4">
                                                 <input
@@ -351,7 +396,6 @@ const OrderList = ({
                                             <p className="font-semibold text-gray-800">
                                                 #{order.orderNumber}
                                             </p>
-
                                             <p className="mt-1 text-xs text-gray-400">
                                                 {order._id}
                                             </p>
@@ -361,7 +405,6 @@ const OrderList = ({
                                             <p className="font-medium text-gray-800">
                                                 {order.address?.name || "-"}
                                             </p>
-
                                             <p className="mt-1 text-xs text-gray-500">
                                                 {order.address?.contact || "-"}
                                             </p>
@@ -375,7 +418,6 @@ const OrderList = ({
                                             <p className="text-sm font-medium capitalize text-gray-700">
                                                 {order.paymentData?.method || "-"}
                                             </p>
-
                                             <p className="mt-1 text-xs capitalize text-gray-400">
                                                 {order.paymentData?.status || "-"}
                                             </p>
