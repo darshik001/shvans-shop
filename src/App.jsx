@@ -22,6 +22,7 @@ import CouponForm from './components/admin/coupons/CouponForm'
 import Settings from './components/admin/Settings'
 import OrderList from './components/admin/OrderList'
 import OrderSuccess from './page/OrderSuccess'
+import ContentManagement from './components/admin/ContentManagement'
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
             <Route path="coupon-form" element={<CouponForm />} />
             <Route path="settings" element={<Settings />} />
             <Route path="orders" element={<OrderList />} />
+            <Route path="content-management" element={<ContentManagement />} />
 
 
           </Route>

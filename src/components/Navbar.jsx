@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const { user, AccessToken } = useSelector((state) => state.userAuth);
+  const {announcement} = useSelector((state)=>state.common)
+  console.log(announcement)
   const { carts } = useSelector((state) => state.carts);
   const navigate = useNavigate();
 
@@ -45,10 +47,22 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-[#e9ddd0] bg-[#fffdf9]/95 text-[#30241f] backdrop-blur-md">
 
       {/* Announcement Bar */}
-      <div className="bg-[#30241f] px-4 py-2.5 text-center text-[10px] font-medium uppercase tracking-[2px] text-white sm:text-xs sm:tracking-[3px]">
-        A little luxury, every day — discover your signature scent
-      </div>
-
+     {/* Announcement Bar */}
+{Array.isArray(announcement) && announcement.length > 0 && (
+  <div className="overflow-hidden bg-[#30241f] py-2.5 text-white">
+    <div className="announcement-marquee flex w-max">
+      {[...announcement, ...announcement].map((item, index) => (
+        <span
+          key={index}
+          className="mx-8 flex shrink-0 items-center whitespace-nowrap text-[10px] font-medium uppercase tracking-[2px] sm:text-xs sm:tracking-[3px]"
+        >
+          {item}
+          <span className="ml-8 text-[#c9a47f]">✦</span>
+        </span>
+      ))}
+    </div>
+  </div>
+)}
       {/* Main Navbar */}
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 

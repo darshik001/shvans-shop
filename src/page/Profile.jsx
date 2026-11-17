@@ -16,6 +16,7 @@ import {
   FaCreditCard,
   FaBan,
   FaUndo,
+  FaStar,
 } from "react-icons/fa";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -26,12 +27,13 @@ import {
 } from "../toolkit/slices/user/userAuth";
 import { useNavigate } from "react-router-dom";
 import { CanceleOrder, ClearUserOrdersmessage, ReturnOrder } from "../toolkit/slices/user/userOrder";
+import { CreatReview } from "../toolkit/slices/user/review";
 
 const Profile = () => {
   const { user, errMessage, successMessage, isLogin, AccessToken } = useSelector((state) => state.userAuth);
-
   const userOrderState = useSelector((state) => state.userOrder);
-
+  const review = useSelector((state) => state.review)
+  const reviews = review.reviews
   const orders = Array.isArray(userOrderState.orders) ? userOrderState.orders : [];
 
   const orderLoading = userOrderState.isLoading || false;
@@ -46,6 +48,16 @@ const Profile = () => {
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [selectedReturnOrder, setSelectedReturnOrder] = useState(null);
   const [returnLoading, setReturnLoading] = useState(false);
+
+  // Product review modal states
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedReviewOrder, setSelectedReviewOrder] = useState(null);
+  const [selectedReviewItem, setSelectedReviewItem] = useState(null);
+  const [selectedExistingReview, setSelectedExistingReview] = useState(null);
+  const [reviewData, setReviewData] = useState({
+    rating: 0,
+    comment: "",
+  });
 
   const [returnData, setReturnData] = useState({
     reason: "",
@@ -307,6 +319,80 @@ const Profile = () => {
     setSelectedReturnOrder(null);
   };
 
+  // Find an existing review for this exact order and product
+  const getExistingReview = (order, item) => {
+    const allReviews = Array.isArray(reviews) ? reviews : [];
+    const orderId = String(order?._id || "");
+    const itemProductId = String(
+      item?.productId?._id || item?.productId || item?.product?._id || ""
+    );
+
+    return allReviews.find((reviewItem) => {
+      const reviewOrderId = String(
+        reviewItem?.orderId?._id || reviewItem?.orderId || ""
+      );
+      const reviewProductId = String(
+        reviewItem?.productId?._id || reviewItem?.productId || ""
+      );
+
+      // orderId + productId: one order can contain multiple products.
+      return reviewOrderId === orderId && reviewProductId === itemProductId;
+    });
+  };
+
+  // Open review modal and prefill it when a review already exists
+  const handleOpenReview = (order, item) => {
+    const existingReview = getExistingReview(order, item);
+
+    setSelectedReviewOrder(order);
+    setSelectedReviewItem(item);
+    setSelectedExistingReview(existingReview || null);
+    setReviewData({
+      rating: existingReview?.rating || 0,
+      comment: existingReview?.comment || "",
+    });
+    setShowReviewModal(true);
+  };
+
+  // Submit product review (console only for now)
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+
+    if (!selectedReviewOrder || !selectedReviewItem) return;
+
+    if (!reviewData.rating) {
+      toast.error("Please select a star rating");
+      return;
+    }
+
+    if (!reviewData.comment.trim()) {
+      toast.error("Please enter your review comment");
+      return;
+    }
+    const payload = {
+      orderId: selectedReviewOrder._id,
+      productId: selectedReviewItem.productId,
+      rating: reviewData.rating,
+      comment: reviewData.comment.trim(),
+    };
+
+    dispatch(CreatReview(payload))
+
+    setShowReviewModal(false);
+    setSelectedReviewOrder(null);
+    setSelectedReviewItem(null);
+    setSelectedExistingReview(null);
+    setReviewData({ rating: 0, comment: "" });
+  };
+
+  const closeReviewModal = () => {
+    setShowReviewModal(false);
+    setSelectedReviewOrder(null);
+    setSelectedReviewItem(null);
+    setSelectedExistingReview(null);
+    setReviewData({ rating: 0, comment: "" });
+  };
+
   // Format date
   const formatDate = (date) => {
     if (!date) return "-";
@@ -388,13 +474,7 @@ const Profile = () => {
 
   // Product image
   const getItemImage = (item) => {
-    return (
-      item.image ||
-      item.productImage ||
-      item.product?.productImages?.[0] ||
-      item.productImages?.[0] ||
-      null
-    );
+    return (item.image_url || null);
   };
 
   // Quantity
@@ -843,6 +923,17 @@ const Profile = () => {
                                             Variant: {item.variant.name}
                                           </p>
                                         )}
+                                        {normalizeStatus(order.status) === "delivered" &&
+                                          normalizeStatus(order.type) === "forward" && (
+                                            <button
+                                              type="button"
+                                              onClick={() => handleOpenReview(order, item)}
+                                              className="mt-3 inline-flex items-center gap-2 border border-[#a77b51] px-4 py-2 text-xs font-semibold text-[#a77b51] transition hover:bg-[#a77b51] hover:text-white"
+                                            >
+                                              <FaStar />
+                                              {getExistingReview(order, item) ? "View / Edit Review" : "Write Review"}
+                                            </button>
+                                          )}
                                       </div>
 
                                       <div className="text-left sm:text-right">
@@ -939,6 +1030,116 @@ const Profile = () => {
           </div>
         </div>
       </main>
+
+      {/* PRODUCT REVIEW MODAL */}
+      {showReviewModal && selectedReviewOrder && selectedReviewItem && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg overflow-hidden bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#eee5db] bg-[#30241f] p-5 text-white">
+              <div>
+                <h3 className="font-serif text-xl">{selectedExistingReview ? "Your Review" : "Write a Review"}</h3>
+                <p className="mt-1 text-xs text-[#d8b58e]">
+                  Order #{selectedReviewOrder.orderNumber}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeReviewModal}
+                className="text-xl text-white transition hover:text-[#d8b58e]"
+                aria-label="Close review modal"
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitReview} className="space-y-5 p-5">
+              {selectedExistingReview && (
+                <div className="border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                  You have already reviewed this product for this order. Your previous rating and comment are filled below.
+                </div>
+              )}
+              <div className="border border-[#eee5db] bg-[#fffdf9] p-4">
+                <p className="text-xs uppercase tracking-wider text-[#9b8d80]">
+                  Product
+                </p>
+                <p className="mt-2 font-semibold text-[#30241f]">
+                  {getItemName(selectedReviewItem)}
+                </p>
+                <p className="mt-1 text-xs text-[#817368]">
+                  SKU: {selectedReviewItem.sku || "Not available"}
+                </p>
+              </div>
+
+              <div>
+                <label className="mb-3 block text-sm font-medium text-[#30241f]">
+                  Your Rating *
+                </label>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() =>
+                        setReviewData((prev) => ({ ...prev, rating: star }))
+                      }
+                      className="text-3xl transition hover:scale-110"
+                      aria-label={`Rate ${star} out of 5 stars`}
+                    >
+                      <FaStar
+                        className={
+                          star <= reviewData.rating
+                            ? "text-[#d49a42]"
+                            : "text-gray-300"
+                        }
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-sm text-[#817368]">
+                    {reviewData.rating ? `${reviewData.rating}/5` : "Select stars"}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#30241f]">
+                  Your Comment *
+                </label>
+                <textarea
+                  value={reviewData.comment}
+                  onChange={(e) =>
+                    setReviewData((prev) => ({
+                      ...prev,
+                      comment: e.target.value,
+                    }))
+                  }
+                  rows={4}
+                  required
+                  placeholder="Share your experience with this product..."
+                  className="w-full resize-none border border-[#d8cabc] px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+                />
+              </div>
+
+              <div className="flex flex-col-reverse gap-3 border-t border-[#eee5db] pt-5 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={closeReviewModal}
+                  className="border border-[#c9b8a6] px-6 py-3 text-sm transition hover:bg-[#f6eee5]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center gap-2 bg-[#30241f] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#8d6846]"
+                >
+                  <FaStar />
+                  {selectedExistingReview ? "Update Review" : "Submit Review"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* RETURN ORDER MODAL */}
       {showReturnModal && selectedReturnOrder && (

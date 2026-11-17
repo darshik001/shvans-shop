@@ -8,17 +8,24 @@ import userProducts from "./user/products";
 import carts from "./user/carts";
 import adminOrder from "./admin/adminOrder"
 import userOrder from "./user/userOrder"
-
+import review from "./user/review"
+import common from "./user/common"
+import announcements from "./admin/announcements"
+import banners from "./admin/banner"
 const rootReducer = combineReducers({
     userAuth: userAuth,
     userProducts: userProducts,
     carts: carts,
-    userOrder:userOrder,
+    userOrder: userOrder,
+    review: review,
+    common: common,
     adminAuth: adminAuth,
     AdminCategories: categories,
     AdminProducts: products,
     AdminCoupons: coupons,
-    AdminOrder: adminOrder
+    AdminOrder: adminOrder,
+    AdminAnnounc: announcements,
+    AdminBanner: banners
 });
 
 

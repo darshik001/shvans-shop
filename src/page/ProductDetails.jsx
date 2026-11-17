@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,20 +12,19 @@ import {
 } from "react-icons/fi";
 
 import { AddToCart } from "../toolkit/slices/user/carts";
+import axios from "axios";
 
 const ProductDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
 
-    const products = useSelector(
-        (state) => state.userProducts.products || []
-    );
+    const products = useSelector((state) => state.userProducts.products || []);
 
     const [selectedImage, setSelectedImage] = useState(0);
     const [selectedVariant, setSelectedVariant] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [showAllReviews, setShowAllReviews] = useState(false);
-
+    const [reviews, setreviews] = useState([])
     const isLoading = useSelector(
         (state) => state.carts.isLoading
     );
@@ -35,7 +34,25 @@ const ProductDetails = () => {
         () => products.find((item) => item._id === id),
         [products, id]
     );
+   
 
+    const GetReviews = async () => {
+        try {
+            const APIURL = import.meta.env.VITE_API_URL
+
+            const respons = await axios.get(`${APIURL}/user/review/product/${product?._id}`)
+            setreviews(respons.data.reviews)
+        } catch (error) {
+            console.log(error || error.message)
+        }
+    }
+
+    useEffect(() => {
+        if (product) {
+
+            GetReviews()
+        }
+    }, [product?._id, product])
     // Same Category Products
     const relatedProducts = useMemo(() => {
         if (!product) return [];
@@ -78,9 +95,10 @@ const ProductDetails = () => {
         );
     }
 
+
     const images = product.productImages || [];
     const variants = product.variants || [];
-    const reviews = product.reviews || [];
+
 
     const variant = variants[selectedVariant];
 
@@ -88,18 +106,9 @@ const ProductDetails = () => {
     const stock = Number(variant?.stock || 0);
 
     // Rating
-    const averageRating =
-        reviews.length > 0
-            ? reviews.reduce(
-                (total, review) =>
-                    total + Number(review.rating || 0),
-                0
-            ) / reviews.length
-            : Number(product.averageRating || product.rating || 0);
+    const averageRating = reviews.length > 0 ? reviews.reduce((total, review) => total + Number(review.rating || 0), 0) / reviews.length : Number(product.averageRating || product.rating || 0);
 
-    const displayReviews = showAllReviews
-        ? reviews
-        : reviews.slice(0, 3);
+    const displayReviews = showAllReviews ? reviews : reviews.slice(0, 3);
 
     // Add To Cart
     const handleAddToCart = () => {
@@ -115,6 +124,9 @@ const ProductDetails = () => {
             })
         );
     };
+
+
+
 
     return (
         <div className="min-h-screen bg-[#faf8f5] py-10 px-4 sm:px-6 lg:px-10">
@@ -173,8 +185,8 @@ const ProductDetails = () => {
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
                                         className={`w-20 h-20 border-2 overflow-hidden ${selectedImage === index
-                                                ? "border-[#a77b51]"
-                                                : "border-[#eee5dc]"
+                                            ? "border-[#a77b51]"
+                                            : "border-[#eee5dc]"
                                             }`}
                                     >
                                         <img
@@ -272,8 +284,8 @@ const ProductDetails = () => {
                                                 setQuantity(1);
                                             }}
                                             className={`px-5 py-3 border text-sm transition ${selectedVariant === index
-                                                    ? "border-[#a77b51] bg-[#f0e8df] text-[#a77b51]"
-                                                    : "border-[#e8ded4] bg-white text-[#6f5b4d] hover:border-[#a77b51]"
+                                                ? "border-[#a77b51] bg-[#f0e8df] text-[#a77b51]"
+                                                : "border-[#e8ded4] bg-white text-[#6f5b4d] hover:border-[#a77b51]"
                                                 }`}
                                         >
                                             {item.unit}
@@ -442,17 +454,12 @@ const ProductDetails = () => {
 
                                             <div>
                                                 <h3 className="font-semibold text-[#34271f]">
-                                                    {review.user?.name ||
-                                                        review.userName ||
-                                                        review.name ||
-                                                        "Customer"}
+                                                    {review.userId?.name || review.userName || review.name || "Customer"}
                                                 </h3>
 
                                                 {review.createdAt && (
                                                     <p className="text-xs text-[#9b8c80] mt-1">
-                                                        {new Date(
-                                                            review.createdAt
-                                                        ).toLocaleDateString("en-IN")}
+                                                        {new Date(review.createdAt).toLocaleDateString("en-IN")}
                                                     </p>
                                                 )}
                                             </div>
@@ -476,10 +483,7 @@ const ProductDetails = () => {
                                         </div>
 
                                         <p className="text-sm text-[#8a796d] leading-7 mt-5">
-                                            {review.comment ||
-                                                review.review ||
-                                                review.description ||
-                                                "No review description."}
+                                            {review.comment || review.review || review.description || "No review description."}
                                         </p>
 
                                     </div>

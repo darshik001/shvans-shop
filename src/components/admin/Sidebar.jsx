@@ -13,6 +13,9 @@ import {
   FiMenu,
   FiX,
   FiHexagon,
+  FiTag,
+  FiFileText,
+  FiFolder,
 } from "react-icons/fi";
 import { AdminLogout } from "../../toolkit/slices/admin/adminAuth";
 
@@ -40,12 +43,17 @@ const Sidebar = () => {
     {
       name: "Categories",
       path: "/admin/categories",
-      icon: FiLayers,
+      icon: FiFolder,
     },
     {
       name: "Coupons",
       path: "/admin/coupons",
-      icon: FiLayers,
+      icon: FiTag,
+    },
+    {
+      name: "Content-Management",
+      path: "/admin/content-management",
+      icon: FiFileText,
     },
     {
       name: "Settings",

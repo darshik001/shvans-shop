@@ -6,6 +6,8 @@ import { GetAllProducts } from "../toolkit/slices/user/products";
 import { AddToCart, GetCarts } from "../toolkit/slices/user/carts";
 import { useEffect } from "react";
 import { GetUserOrders } from "../toolkit/slices/user/userOrder";
+import { GetReview } from "../toolkit/slices/user/review";
+import { GetAllcategories, GetAnnouncement } from "../toolkit/slices/user/common";
 
 
 const UserLayout = () => {
@@ -15,9 +17,10 @@ const UserLayout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(GetAnnouncement())
+    dispatch(GetAllcategories())
     dispatch(GetAllProducts());
     dispatch(GetCarts());
-    dispatch(GetUserOrders())
   }, [dispatch, isLogin])
 
 
@@ -28,6 +31,9 @@ const UserLayout = () => {
         dispatch(AddToCart(carts));
 
       }
+
+      dispatch(GetUserOrders())
+      dispatch(GetReview())
     }
   }, [isLogin])
 

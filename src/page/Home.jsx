@@ -14,103 +14,30 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import { AddToCart } from "../toolkit/slices/user/carts";
 
-const categories = [
-  {
-    name: "For Him",
-    image:
-      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    name: "For Her",
-    image:
-      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    name: "Unisex",
-    image:
-      "https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    name: "Gift Sets",
-    image:
-      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=85",
-  },
-];
+// const categories = [
+//   {
+//     name: "For Him",
+//     image:
+//       "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85",
+//   },
+//   {
+//     name: "For Her",
+//     image:
+//       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=85",
+//   },
+//   {
+//     name: "Unisex",
+//     image:
+//       "https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=700&q=85",
+//   },
+//   {
+//     name: "Gift Sets",
+//     image:
+//       "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=85",
+//   },
+// ];
 
-const products = [
-  {
-    id: 1,
-    name: "Midnight Oud",
-    price: 2499,
-    oldPrice: 3299,
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 2,
-    name: "Bloom Essence",
-    price: 1899,
-    oldPrice: 2499,
-    tag: "NEW",
-    image:
-      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 3,
-    name: "Velvet Noir",
-    price: 2799,
-    oldPrice: 3499,
-    tag: "TRENDING",
-    image:
-      "https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 4,
-    name: "Golden Amber",
-    price: 2199,
-    oldPrice: 2899,
-    tag: "POPULAR",
-    image:
-      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 5,
-    name: "Royal Musk",
-    price: 1999,
-    oldPrice: 2699,
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 6,
-    name: "Rose Elixir",
-    price: 1699,
-    oldPrice: 2299,
-    tag: "NEW",
-    image:
-      "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 7,
-    name: "Ocean Breeze",
-    price: 2299,
-    oldPrice: 2999,
-    tag: "TRENDING",
-    image:
-      "https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    id: 8,
-    name: "Pure Elegance",
-    price: 2599,
-    oldPrice: 3199,
-    tag: "POPULAR",
-    image:
-      "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=700&q=85",
-  },
-];
+
 
 const benefits = [
   {
@@ -171,6 +98,8 @@ const reviews = [
 
 const Home = () => {
   const { products } = useSelector((state) => state.userProducts)
+  const { categories } = useSelector((state) => state.common)
+  // console.log(categories)
   const dispatch = useDispatch()
   const AddToCartData = (cartData) => {
 
@@ -180,10 +109,7 @@ const Home = () => {
   }
   return (
     <main className="min-h-screen bg-[#fffdf9] text-[#29231f]">
-      {/* Announcement Bar */}
-      <div className="bg-[#30241f] px-4 py-2.5 text-center text-xs tracking-[2px] text-white sm:text-sm">
-        DISCOVER YOUR SIGNATURE SCENT — EXPLORE SHVANS
-      </div>
+     
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#f6eee5]">
@@ -207,7 +133,7 @@ const Home = () => {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                to="/products"
+                to="/shop"
                 className="inline-flex items-center gap-3 bg-[#30241f] px-7 py-4 text-sm font-medium text-white transition hover:bg-[#8d6846]"
               >
                 Explore Fragrances <FiArrowRight />
@@ -343,7 +269,7 @@ const Home = () => {
           </div>
 
           <Link
-            to="/products"
+            to="/shop"
             className="hidden items-center gap-2 text-sm hover:text-[#a77b51] sm:flex"
           >
             View All <FiArrowRight />
@@ -353,13 +279,13 @@ const Home = () => {
         <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {categories.map((category) => (
             <Link
-              to="/products"
-              key={category.name}
+              to="/shop"
+              key={category?._id}
               className="group block"
             >
               <div className="overflow-hidden bg-[#f4ece3]">
                 <img
-                  src={category.image}
+                  src={category.categoryImage}
                   alt={category.name}
                   loading="lazy"
                   className="h-52 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"

@@ -6,6 +6,8 @@ import { clearCategoryMessages, GetCategory } from "../toolkit/slices/admin/cate
 import { GetProduct } from "../toolkit/slices/admin/products";
 import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
 import { GetAllOrders } from "../toolkit/slices/admin/adminOrder";
+import { GetAnnounc } from "../toolkit/slices/admin/announcements";
+import { GetBanner } from "../toolkit/slices/admin/banner";
 
 const AdminLayout = () => {
   const dispatch = useDispatch()
@@ -17,6 +19,8 @@ const AdminLayout = () => {
       dispatch(GetProduct())
       dispatch(GetAllCoupons())
       dispatch(GetAllOrders())
+      dispatch(GetAnnounc())
+      dispatch(GetBanner())
       clearCategoryMessages()
     }
   }, [isLogin, AccessToken, dispatch])
