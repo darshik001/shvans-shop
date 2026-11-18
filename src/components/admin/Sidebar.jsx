@@ -16,6 +16,7 @@ import {
   FiTag,
   FiFileText,
   FiFolder,
+  FiInbox,
 } from "react-icons/fi";
 import { AdminLogout } from "../../toolkit/slices/admin/adminAuth";
 
@@ -49,6 +50,10 @@ const Sidebar = () => {
       name: "Coupons",
       path: "/admin/coupons",
       icon: FiTag,
+    }, {
+      name: "Inquiry",
+      path: "/admin/inquiry",
+      icon: FiInbox,
     },
     {
       name: "Content-Management",

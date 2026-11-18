@@ -651,7 +651,7 @@ const Profile = () => {
                       </h3>
                     </div>
 
-                    {!isEditing && (
+                    {/* {!isEditing && (
                       <button
                         type="button"
                         onClick={() => setIsEditing(true)}
@@ -660,7 +660,7 @@ const Profile = () => {
                         <FaEdit />
                         Edit Profile
                       </button>
-                    )}
+                    )} */}
                   </div>
 
                   {/* Details */}

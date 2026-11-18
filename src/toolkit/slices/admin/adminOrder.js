@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from 'axios'
+import api from "./axios";
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -10,8 +11,8 @@ export const GetAllOrders = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/order/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/order/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -23,8 +24,8 @@ export const AcceptOrders = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/order/accepte`, { orderIds: data }, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/order/accepte`, { orderIds: data }, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
 
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -38,8 +39,8 @@ export const DownloadLabels = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/order/labels`, { shipmentIds: data }, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/order/labels`, { shipmentIds: data }, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
 
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -56,10 +57,10 @@ const AdminOrderSlice = createSlice({
         SuccessMessage: "",
     },
     reducers: {
-        ClearOrdersmessage : (state)=>{
-            state.ErrMessage="",
-            state.SuccessMessage="",
-            state.isLoading=false
+        ClearOrdersmessage: (state) => {
+            state.ErrMessage = "",
+                state.SuccessMessage = "",
+                state.isLoading = false
         }
     },
     extraReducers: (builder) => {
@@ -80,50 +81,50 @@ const AdminOrderSlice = createSlice({
                 state.SuccessMessage = ""
             })
 
-            .addCase(AcceptOrders.pending,(state)=>{
+            .addCase(AcceptOrders.pending, (state) => {
                 state.isLoading = true,
-                state.ErrMessage = "",
-                state.SuccessMessage=""
+                    state.ErrMessage = "",
+                    state.SuccessMessage = ""
             })
 
-            .addCase(AcceptOrders.fulfilled,(state,action)=>{
+            .addCase(AcceptOrders.fulfilled, (state, action) => {
                 state.isLoading = false,
-                state.ErrMessage = "",
-                state.SuccessMessage=action.payload.message,
-                state.orders = action.payload.orders
+                    state.ErrMessage = "",
+                    state.SuccessMessage = action.payload.message,
+                    state.orders = action.payload.orders
             })
-            .addCase(AcceptOrders.rejected,(state,action)=>{
+            .addCase(AcceptOrders.rejected, (state, action) => {
                 state.isLoading = false,
-                state.ErrMessage = action.payload.message,
-                state.SuccessMessage=""
+                    state.ErrMessage = action.payload.message,
+                    state.SuccessMessage = ""
             })
 
 
 
-            
-            .addCase(DownloadLabels.pending,(state)=>{
+
+            .addCase(DownloadLabels.pending, (state) => {
                 state.isLoading = true,
-                state.ErrMessage = "",
-                state.SuccessMessage=""
+                    state.ErrMessage = "",
+                    state.SuccessMessage = ""
             })
 
-            .addCase(DownloadLabels.fulfilled,(state,action)=>{
+            .addCase(DownloadLabels.fulfilled, (state, action) => {
                 state.isLoading = false,
-                state.ErrMessage = "",
-                state.SuccessMessage=action.payload.message,
-                state.orders = action.payload.orders
+                    state.ErrMessage = "",
+                    state.SuccessMessage = action.payload.message,
+                    state.orders = action.payload.orders
             })
-            .addCase(DownloadLabels.rejected,(state,action)=>{
+            .addCase(DownloadLabels.rejected, (state, action) => {
                 state.isLoading = false,
-                state.ErrMessage = action.payload.message,
-                state.SuccessMessage=""
+                    state.ErrMessage = action.payload.message,
+                    state.SuccessMessage = ""
             })
-            
+
     }
 })
 
 
-export const {ClearOrdersmessage} = AdminOrderSlice.actions
+export const { ClearOrdersmessage } = AdminOrderSlice.actions
 export default AdminOrderSlice.reducer
 
 

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import api from './axios'
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -26,8 +27,8 @@ export const AddProducts = createAsyncThunk(
                 });
             }
 
-            const resposn = await axios.post(`${APIURL}/admin/product/add`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/product/add`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -40,8 +41,8 @@ export const GetProduct = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/product/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/product/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -70,8 +71,8 @@ export const UpdateProduct = createAsyncThunk(
         }
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.patch(`${APIURL}/admin/product/update/${data._id}`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.patch(`${APIURL}/admin/product/update/${data._id}`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }

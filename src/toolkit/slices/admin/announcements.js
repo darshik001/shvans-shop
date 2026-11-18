@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import api from './axios';
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -8,8 +9,8 @@ export const AddAnnounc = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/announcements/add`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/announcements/add`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -23,8 +24,8 @@ export const GetAnnounc = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/announcements/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/announcements/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -38,8 +39,8 @@ export const UpdateAnnounc = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.patch(`${APIURL}/admin/announcements/update/${data._id}`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.patch(`${APIURL}/admin/announcements/update/${data._id}`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -52,8 +53,8 @@ export const DeleteAnnounc = createAsyncThunk(
     async (id, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.delete(`${APIURL}/admin/announcements/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.delete(`${APIURL}/admin/announcements/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -106,7 +107,7 @@ const announcementsSlice = createSlice({
                     state.successMessage = ""
             })
 
-            
+
 
             .addCase(UpdateAnnounc.pending, (state) => {
                 state.isLoading = true,

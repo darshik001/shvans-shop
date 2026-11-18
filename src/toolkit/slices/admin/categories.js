@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import api from './axios';
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -18,9 +19,9 @@ export const AddCategory = createAsyncThunk(
                 formData.append("categoryImage", data.categoryImage);
             }
 
-            const resposn = await axios.post(`${APIURL}/admin/category/add`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn.data)
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/category/add`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            console.log(respons.data)
+            return respons.data
         } catch (error) {
             console.log(error)
             return rejectWithValue(error.response.data)
@@ -34,9 +35,9 @@ export const GetCategory = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/category/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            const respons = await api.get(`${APIURL}/admin/category/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
 
-            return resposn.data
+            return respons.data
         } catch (error) {
 
             return rejectWithValue(error.response.data)
@@ -57,8 +58,8 @@ export const UpdateCategory = createAsyncThunk(
             if (data.categoryImage) {
                 formData.append("categoryImage", data.categoryImage);
             }
-            const resposn = await axios.patch(`${APIURL}/admin/category/update`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.patch(`${APIURL}/admin/category/update`, formData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }

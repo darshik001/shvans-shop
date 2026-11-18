@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import api from './axios'
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -16,9 +17,9 @@ export const AddBanner = createAsyncThunk(
             fromData.append("status", data.status);
             fromData.append("bannerImage", data.bannerImage);
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/banner/add`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn.data)
-            return resposn.data
+            const respons = await api.post(`${APIURL}/admin/banner/add`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            console.log(respons.data)
+            return respons.data
         } catch (error) {
 
             return rejectWithValue(error.response.data)
@@ -34,8 +35,8 @@ export const GetBanner = createAsyncThunk(
         try {
 
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/banner/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/banner/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -59,8 +60,8 @@ export const UpdateBanner = createAsyncThunk(
                 fromData.append("bannerImage", data.bannerImage);
             }
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.patch(`${APIURL}/admin/banner/update/${data._id}`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.patch(`${APIURL}/admin/banner/update/${data._id}`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
 
             return rejectWithValue(error.response.data)
@@ -78,8 +79,8 @@ export const DeleteBanner = createAsyncThunk(
         try {
 
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.delete(`${APIURL}/admin/banner/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.delete(`${APIURL}/admin/banner/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
 
             return rejectWithValue(error.response.data)

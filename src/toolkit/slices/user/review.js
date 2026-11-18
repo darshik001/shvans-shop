@@ -7,8 +7,8 @@ export const GetReview = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().userAuth;
-            const resposn = await axios.get(`${APIURL}/user/review/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await axios.get(`${APIURL}/user/review/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             console.log(error)
             return rejectWithValue(error.response.data)
@@ -23,9 +23,9 @@ export const CreatReview = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().userAuth;
-            const resposn = await axios.post(`${APIURL}/user/review/create`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn)
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/user/review/create`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            console.log(respons)
+            return respons.data
         } catch (error) {
             console.log(error)
             return rejectWithValue(error.response.data)

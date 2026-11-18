@@ -13,8 +13,8 @@ export const sentLoginOtp = createAsyncThunk(
     "userauth/sent-otp",
     async (data, { rejectWithValue }) => {
         try {
-            const resposn = await axios.post(`${APIURL}/user/auth/sent-otp`, data)
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/user/auth/sent-otp`, data)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -26,9 +26,9 @@ export const userverifyOtpAndLogin = createAsyncThunk(
         try {
             const deviceToken = await getDeviceToken()
 
-            const resposn = await axios.post(`${APIURL}/user/auth/sent-otp-verify`, {...data,deviceToken:deviceToken})
+            const respons = await axios.post(`${APIURL}/user/auth/sent-otp-verify`, { ...data, deviceToken: deviceToken })
 
-            return resposn.data
+            return respons.data
 
         } catch (error) {
             console.log(error.response.data?.message)
@@ -42,9 +42,9 @@ export const userLogout = createAsyncThunk(
         console.log("running")
         try {
 
-            const resposn = await axios.post(`${APIURL}/user/auth/user-logout`, {}, { headers: { Authorization: `Bearer ${data}` } })
+            const respons = await axios.post(`${APIURL}/user/auth/user-logout`, {}, { headers: { Authorization: `Bearer ${data}` } })
 
-            return resposn.data
+            return respons.data
         } catch (error) {
             console.log("error", error)
             return rejectWithValue(error.response.data)
@@ -60,8 +60,8 @@ export const GoogleLogin = createAsyncThunk(
             const googleRespons = await signInWithPopup(auth, provder)
             const idToken = await getIdToken(googleRespons.user);
             const deviceToken = await getDeviceToken()
-            const resposn = await axios.post(`${APIURL}/user/auth/user-google-login`, {GoogleIdToken:idToken,deviceToken:deviceToken})
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/user/auth/user-google-login`, { GoogleIdToken: idToken, deviceToken: deviceToken })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
 

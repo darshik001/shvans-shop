@@ -140,8 +140,8 @@ const Home = () => {
               <div
                 key={banner._id}
                 className={`${activeBanner === index
-                    ? "relative opacity-100"
-                    : "absolute inset-0 pointer-events-none opacity-0"
+                  ? "relative opacity-100"
+                  : "absolute inset-0 pointer-events-none opacity-0"
                   } transition-opacity duration-700`}
                 aria-hidden={activeBanner !== index}
               >
@@ -269,8 +269,8 @@ const Home = () => {
                       onClick={() => setActiveBanner(index)}
                       aria-label={`Go to banner ${index + 1}`}
                       className={`h-2.5 rounded-full transition-all duration-300 ${activeBanner === index
-                          ? "w-8 bg-[#a77b51]"
-                          : "w-2.5 bg-[#c9b8a6] hover:bg-[#a77b51]"
+                        ? "w-8 bg-[#a77b51]"
+                        : "w-2.5 bg-[#c9b8a6] hover:bg-[#a77b51]"
                         }`}
                     />
                   ))}
@@ -374,7 +374,7 @@ const Home = () => {
 
           <div className="mt-10 text-center">
             <Link
-              to="/products"
+              to="/shop"
               className="inline-flex items-center gap-3 border border-[#30241f] px-8 py-4 text-sm transition hover:bg-[#30241f] hover:text-white"
             >
               Explore All Fragrances

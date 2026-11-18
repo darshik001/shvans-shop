@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiMapPin,
   FiPhone,
@@ -8,8 +8,13 @@ import {
   FiSend,
   FiMessageCircle,
 } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { SentInquiry } from "../toolkit/slices/user/common";
+import { toast } from "react-toastify";
 
 const ContactUs = () => {
+  const dispatch = useDispatch()
+  const { successMessage, errMessage } = useSelector((state) => state.common)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,12 +32,7 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Backend API connect karvani baki che
-    console.log("Contact Form Data:", formData);
-
-    alert("Thank you! Your message has been submitted.");
-
+    dispatch(SentInquiry(formData))
     setFormData({
       name: "",
       email: "",
@@ -65,6 +65,15 @@ const ContactUs = () => {
     },
   ];
 
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage)
+    }
+    if (errMessage) {
+      toast.error(errMessage)
+    }
+  }, [errMessage, successMessage])
   return (
     <div className="bg-[#faf8f5] min-h-screen text-[#29231f]">
 

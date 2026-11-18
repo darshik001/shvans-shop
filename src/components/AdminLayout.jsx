@@ -8,7 +8,7 @@ import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
 import { GetAllOrders } from "../toolkit/slices/admin/adminOrder";
 import { GetAnnounc } from "../toolkit/slices/admin/announcements";
 import { GetBanner } from "../toolkit/slices/admin/banner";
-import { GetDashboardReposrt } from "../toolkit/slices/admin/adminreport";
+import { GetDashboardReposrt, GetInquiryes } from "../toolkit/slices/admin/adminreport";
 
 const AdminLayout = () => {
   const dispatch = useDispatch()
@@ -22,7 +22,8 @@ const AdminLayout = () => {
       dispatch(GetAnnounc())
       dispatch(GetBanner())
       dispatch(GetDashboardReposrt())
-      clearCategoryMessages()
+      dispatch(GetInquiryes())
+      dispatch(clearCategoryMessages())
     }
   }, [isLogin, AccessToken, dispatch])
   return (

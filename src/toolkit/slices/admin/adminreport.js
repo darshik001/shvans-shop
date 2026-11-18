@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import api from './axios';
 const APIURL = import.meta.env.VITE_API_URL
 
 const initiatdashboard = {
@@ -51,12 +52,13 @@ const initiatdashboard = {
 };
 export const GetDashboardReposrt = createAsyncThunk(
     "report/dashboard",
-    async (period, { rejectWithValue }) => {
+    async (period, { rejectWithValue, getState }) => {
         try {
+            const { AccessToken } = getState().adminAuth;
 
             const filter = period ? `?period=${period}` : ""
-            const resposn = await axios.get(`${APIURL}/admin/report/dashboard${filter}`,)
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/report/dashboard${filter}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -65,15 +67,52 @@ export const GetDashboardReposrt = createAsyncThunk(
 
 )
 
+export const GetInquiryes = createAsyncThunk(
+    "report/inquiry",
+    async (_, { rejectWithValue, getState }) => {
+        try {
+            const { AccessToken } = getState().adminAuth;
+            const respons = await api.get(`${APIURL}/admin/report/inquiry`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+
+    }
+)
+
+
+export const UpdateInquiryes = createAsyncThunk(
+    "report/inquiry/update",
+    async (data, { rejectWithValue, getState }) => {
+        try {
+            const { AccessToken } = getState().adminAuth;
+            const respons = await api.patch(`${APIURL}/admin/report/inquiry/update/${data._id}`, { status: data.status }, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+
 const reportSlice = createSlice({
     name: 'products',
     initialState: {
         dashboardData: initiatdashboard,
+        inquiryes: [],
         isLoading: false,
         errMessage: "",
         successMessage: "",
     },
-
+    reducers: {
+        ClearRepostmessage: (state) => {
+            state.errMessage = "",
+                state.successMessage = "",
+                state.isLoading = false
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(GetDashboardReposrt.pending, (state) => {
@@ -91,9 +130,45 @@ const reportSlice = createSlice({
                 state.errMessage = action.payload.message
                 state.successMessage = ""
             })
+
+
+            .addCase(GetInquiryes.pending, (state) => {
+                state.isLoading = true
+                state.errMessage = ""
+                state.successMessage = ""
+            })
+            .addCase(GetInquiryes.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.errMessage = ""
+                state.inquiryes = action.payload.inquiryes
+            })
+            .addCase(GetInquiryes.rejected, (state, action) => {
+                state.isLoading = false
+                state.errMessage = action.payload.message
+                state.successMessage = ""
+            })
+
+
+            .addCase(UpdateInquiryes.pending, (state) => {
+                state.isLoading = true
+                state.errMessage = ""
+                state.successMessage = ""
+            })
+            .addCase(UpdateInquiryes.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.errMessage = ""
+                state.successMessage = action.payload.message
+                state.inquiryes = state.inquiryes.map((item) => item._id === action.payload.inquiry._id ? action.payload.inquiry : item);
+            })
+            .addCase(UpdateInquiryes.rejected, (state, action) => {
+                state.isLoading = false
+                state.errMessage = action.payload.message
+                state.successMessage = ""
+            })
     }
 
 })
 
+export const { ClearRepostmessage } = reportSlice.actions
 
 export default reportSlice.reducer;

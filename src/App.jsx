@@ -28,6 +28,7 @@ import PrivacyPolicy from './page/PrivacyPolicy'
 import TermsConditions from './page/TermsConditions'
 import ReturnPolicy from './page/ReturnPolicy'
 import ContactUs from './page/ContactUs'
+import Inquiries from './components/admin/Inquiries'
 
 function App() {
 
@@ -71,6 +72,7 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="orders" element={<OrderList />} />
             <Route path="content-management" element={<ContentManagement />} />
+            <Route path="inquiry" element={<Inquiries />} />
 
 
           </Route>

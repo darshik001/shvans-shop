@@ -13,8 +13,8 @@ export const AdminSignin = createAsyncThunk(
         try {
             console.log(data)
             const deviceToken = await getDeviceToken()
-            const resposn = await axios.post(`${APIURL}/admin/auth/admin-login`, { ...data, deviceToken })
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/admin/auth/admin-login`, { ...data, deviceToken })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -27,9 +27,9 @@ export const AdminLogout = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/auth/admin-logout`, {}, { headers: { Authorization: `Bearer ${AccessToken}` } });
+            const respons = await axios.post(`${APIURL}/admin/auth/admin-logout`, {}, { headers: { Authorization: `Bearer ${AccessToken}` } });
 
-            return resposn.data;
+            return respons.data;
         } catch (error) {
 
             return rejectWithValue(error.response.data);

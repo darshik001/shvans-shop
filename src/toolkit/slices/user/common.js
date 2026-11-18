@@ -6,8 +6,8 @@ export const GetAllcategories = createAsyncThunk(
     "common/categories",
     async (_, { rejectWithValue }) => {
         try {
-            const resposn = await axios.get(`${APIURL}/user/product/categories`,)
-            return resposn.data
+            const respons = await axios.get(`${APIURL}/user/product/categories`,)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -20,8 +20,8 @@ export const GetAnnouncement = createAsyncThunk(
     "common/announcements",
     async (_, { rejectWithValue }) => {
         try {
-            const resposn = await axios.get(`${APIURL}/user/common/announc`)
-            return resposn.data
+            const respons = await axios.get(`${APIURL}/user/common/announc`)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -34,23 +34,39 @@ export const GetBanner = createAsyncThunk(
     "common/banner",
     async (_, { rejectWithValue }) => {
         try {
-            const resposn = await axios.get(`${APIURL}/user/common/banner`)
-            return resposn.data
+            const respons = await axios.get(`${APIURL}/user/common/banner`)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
 
     }
 
-) 
+)
+
+export const SentInquiry = createAsyncThunk(
+    "common/inquiry",
+    async (data, { rejectWithValue }) => {
+        try {
+            const respons = await axios.post(`${APIURL}/user/common/inquiry`, data)
+            return respons.data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+
+    }
+
+)
 
 const commonSlice = createSlice({
     name: 'common',
     initialState: {
         categories: [],
         announcement: [],
-        banners:[],
+        banners: [],
         isLoading: false,
+        errMessage: "",
+        successMessage: ""
     },
 
     extraReducers: (builder) => {
@@ -92,6 +108,24 @@ const commonSlice = createSlice({
             })
             .addCase(GetBanner.rejected, (state, action) => {
                 state.isLoading = false
+            })
+
+
+            .addCase(SentInquiry.pending, (state) => {
+                state.isLoading = true,
+                    state.errMessage = "",
+                    state.ssuccessMesage = ""
+
+
+            })
+            .addCase(SentInquiry.fulfilled, (state, action) => {
+                state.isLoading = false,
+                    state.successMessage = action.payload.message
+            })
+            .addCase(SentInquiry.rejected, (state, action) => {
+                state.isLoading = false,
+                    state.errMessage = action.payload.message
+
             })
     }
 

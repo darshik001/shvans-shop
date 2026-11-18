@@ -10,8 +10,8 @@ export const GetUserOrders = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().userAuth;
-            const resposn = await axios.get(`${APIURL}/user/order/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await axios.get(`${APIURL}/user/order/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -23,9 +23,9 @@ export const CanceleOrder = createAsyncThunk(
     async (orderId, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().userAuth;
-            const resposn = await axios.post(`${APIURL}/user/order/canele-order/${orderId}`, {}, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn.data)
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/user/order/canele-order/${orderId}`, {}, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            console.log(respons.data)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -39,9 +39,9 @@ export const ReturnOrder = createAsyncThunk(
         try {
             const { AccessToken } = getState().userAuth;
             console.log(data)
-            const resposn = await axios.post(`${APIURL}/user/order/return/${data._id}`, { bankDetails: data.bankDetails, reason: data.reason }, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn.data)
-            return resposn.data
+            const respons = await axios.post(`${APIURL}/user/order/return/${data._id}`, { bankDetails: data.bankDetails, reason: data.reason }, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            console.log(respons.data)
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -63,7 +63,7 @@ const userOrderSlice = createSlice({
     },
     reducers: {
         ClearUserOrdersmessage: (state) => {
-                state.ErrMessage = "",
+            state.ErrMessage = "",
                 state.SuccessMessage = "",
                 state.isLoading = false
         }
@@ -115,11 +115,11 @@ const userOrderSlice = createSlice({
                 state.isLoading = false,
                     state.ErrMessage = "",
                     state.SuccessMessage = action.payload.message
-                    state.orders = state.orders = state.orders.map((order) => order._id === action.payload.order._id ? action.payload.order : order);
+                state.orders = state.orders = state.orders.map((order) => order._id === action.payload.order._id ? action.payload.order : order);
             })
             .addCase(ReturnOrder.rejected, (state, action) => {
                 state.isLoading = false,
-                state.ErrMessage = action.payload.message
+                    state.ErrMessage = action.payload.message
                 state.SuccessMessage = ""
             })
     }

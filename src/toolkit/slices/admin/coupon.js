@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
+import api from './axios';
 const APIURL = import.meta.env.VITE_API_URL
 
 
@@ -8,8 +9,8 @@ export const GetAllCoupons = createAsyncThunk(
     async (_, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.get(`${APIURL}/admin/coupon/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.get(`${APIURL}/admin/coupon/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
@@ -21,9 +22,9 @@ export const AddNewCoupone = createAsyncThunk(
     async (data, { rejectWithValue, getState }) => {
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.post(`${APIURL}/admin/coupon/add`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            const respons = await api.post(`${APIURL}/admin/coupon/add`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
 
-            return resposn.data
+            return respons.data
 
         } catch (error) {
 
@@ -38,9 +39,9 @@ export const UpdateCoupone = createAsyncThunk(
         try {
             console.log("slice data", data)
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.patch(`${APIURL}/admin/coupon/update/${data._id}`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            const respons = await api.patch(`${APIURL}/admin/coupon/update/${data._id}`, data, { headers: { Authorization: `Bearer ${AccessToken}` } })
 
-            return resposn.data
+            return respons.data
         } catch (error) {
 
             return rejectWithValue(error.response.data)
@@ -54,8 +55,8 @@ export const DeleteCoupone = createAsyncThunk(
 
         try {
             const { AccessToken } = getState().adminAuth;
-            const resposn = await axios.delete(`${APIURL}/admin/coupon/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            return resposn.data
+            const respons = await api.delete(`${APIURL}/admin/coupon/delete/${id}`, { headers: { Authorization: `Bearer ${AccessToken}` } })
+            return respons.data
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
