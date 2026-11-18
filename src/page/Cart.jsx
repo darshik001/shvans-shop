@@ -61,10 +61,6 @@ const Cart = () => {
         const currentQuantity = Number(item.quantity) || 1;
 
         const newQuantity = type === "increase" ? currentQuantity + 1 : currentQuantity - 1;
-        console.log(newQuantity)
-
-
-
         dispatch(
             UpdateCartQuantity({
                 productId: item.productId,

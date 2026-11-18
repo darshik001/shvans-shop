@@ -1,89 +1,144 @@
 
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GetDashboardReposrt } from "../../toolkit/slices/admin/adminreport";
 
-const stats = [
-  {
-    title: "Total Revenue",
-    value: "₹2,45,890",
-    change: "+12.5%",
-    icon: "₹",
-    description: "Compared to last month",
-  },
-  {
-    title: "Total Orders",
-    value: "1,248",
-    change: "+8.2%",
-    icon: "▤",
-    description: "Compared to last month",
-  },
-  {
-    title: "Total Products",
-    value: "356",
-    change: "+4.3%",
-    icon: "◇",
-    description: "Active products",
-  },
-  {
-    title: "Total Customers",
-    value: "2,845",
-    change: "+15.8%",
-    icon: "♙",
-    description: "Registered customers",
-  },
-];
+// const dashboardData = {
+//   success: true,
+//   period: "week",
 
-const orders = [
-  {
-    id: "#SHV-1025",
-    customer: "Priya Sharma",
-    product: "Gold Necklace",
-    date: "30 Oct 2026",
-    amount: "₹12,500",
-    status: "Delivered",
-  },
-  {
-    id: "#SHV-1024",
-    customer: "Rahul Patel",
-    product: "Diamond Ring",
-    date: "29 Oct 2026",
-    amount: "₹25,800",
-    status: "Processing",
-  },
-  {
-    id: "#SHV-1023",
-    customer: "Neha Shah",
-    product: "Pearl Earrings",
-    date: "29 Oct 2026",
-    amount: "₹8,900",
-    status: "Pending",
-  },
-  {
-    id: "#SHV-1022",
-    customer: "Amit Mehta",
-    product: "Gold Bracelet",
-    date: "28 Oct 2026",
-    amount: "₹18,200",
-    status: "Delivered",
-  },
-];
+//   stats: {
+//     totalRevenue: 0,
+//     revenueChange: 0,
+//     totalOrders: 0,
+//     ordersChange: 0,
+//     totalProducts: 0,
+//     productsChange: 0,
+//     totalCustomers: 0,
+//     customersChange: 0,
+//   },
 
-const products = [
-  { name: "Gold Necklace", category: "Necklace", sold: 128, price: "₹12,500" },
-  { name: "Diamond Ring", category: "Rings", sold: 96, price: "₹25,800" },
-  { name: "Pearl Earrings", category: "Earrings", sold: 84, price: "₹8,900" },
-];
+//   comparison: {
+//     currentRevenue: 0,
+//     previousRevenue: 0,
+//     currentOrders: 0,
+//     previousOrders: 0,
+//   },
 
-const chartData = [
-  { day: "Mon", value: 35 },
-  { day: "Tue", value: 55 },
-  { day: "Wed", value: 42 },
-  { day: "Thu", value: 75 },
-  { day: "Fri", value: 60 },
-  { day: "Sat", value: 90 },
-  { day: "Sun", value: 68 },
-];
+//   orderSummary: {
+//     completedOrders: 0,
+//     processingOrders: 0,
+//     pendingOrders: 0,
+//     total: 0,
+//   },
+
+//   recentOrders: [
+
+//   ],
+
+//   topProducts: [
+
+//   ],
+
+//   chartData: [
+//     { day: "Mon", value: 0 },
+//     { day: "Tue", value: 0 },
+//     { day: "Wed", value: 0 },
+//     { day: "Thu", value: 0 },
+//     { day: "Fri", value: 0 },
+//     { day: "Sat", value: 0 },
+//     { day: "Sun", value: 0 },
+//   ],
+// };
+
+const formatPrice = (value) =>
+  `₹${Number(value || 0).toLocaleString("en-IN")}`;
+
+const formatDate = (date) =>
+  new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 
 const Dashboard = () => {
+  const { dashboardData } = useSelector((state) => state.AdminReport)
+  const [selectedPeriod, setSelectedPeriod] = useState(dashboardData.period || "week");
+
+  const dispatch = useDispatch()
+  // Select change - currently only console
+  const handlePeriodChange = (e) => {
+    const value = e.target.value;
+    setSelectedPeriod(value);
+    dispatch(GetDashboardReposrt(value))
+  };
+
+  const stats = [
+    {
+      title: "Total Revenue",
+      value: formatPrice(dashboardData.stats.totalRevenue),
+      change: dashboardData.stats.revenueChange,
+      icon: "₹",
+      description: "Compared to previous period",
+    },
+    {
+      title: "Total Orders",
+      value: dashboardData.stats.totalOrders.toLocaleString("en-IN"),
+      change: dashboardData.stats.ordersChange,
+      icon: "▤",
+      description: "Compared to previous period",
+    },
+    {
+      title: "Total Products",
+      value: dashboardData.stats.totalProducts.toLocaleString("en-IN"),
+      change: dashboardData.stats.productsChange,
+      icon: "◇",
+      description: "New products compared to previous period",
+    },
+    {
+      title: "Total Customers",
+      value: dashboardData.stats.totalCustomers.toLocaleString("en-IN"),
+      change: dashboardData.stats.customersChange,
+      icon: "♙",
+      description: "New customers compared to previous period",
+    },
+  ];
+
+  const summary = dashboardData.orderSummary;
+
+  const summaryItems = [
+    {
+      label: "Completed Orders",
+      value: summary.completedOrders,
+    },
+    {
+      label: "Processing Orders",
+      value: summary.processingOrders,
+    },
+    {
+      label: "Pending Orders",
+      value: summary.pendingOrders,
+    },
+  ];
+
+  const maxChartValue = Math.max(
+    ...dashboardData.chartData.map((item) => item.value),
+    1
+  );
+
+  const getStatusClass = (status) => {
+    const classes = {
+      delivered: "bg-green-50 text-green-700",
+      processing: "bg-blue-50 text-blue-700",
+      pending: "bg-yellow-50 text-yellow-700",
+      shipped: "bg-purple-50 text-purple-700",
+      cancelled: "bg-red-50 text-red-700",
+      out_for_delivery: "bg-orange-50 text-orange-700",
+    };
+
+    return classes[status] || "bg-gray-100 text-gray-600";
+  };
+
   return (
     <div className="min-h-screen bg-[#faf8f6] p-4 sm:p-6 lg:p-8">
 
@@ -93,29 +148,30 @@ const Dashboard = () => {
           <p className="text-xs tracking-[3px] text-[#b77b64] font-semibold mb-2">
             SHVANS ADMINISTRATION
           </p>
+
           <h1 className="text-2xl sm:text-3xl font-semibold text-[#211a18]">
             Dashboard Overview
           </h1>
+
           <p className="text-sm text-gray-500 mt-2">
             Welcome back! Here's what's happening with your store today.
           </p>
         </div>
 
-        <button className="bg-[#211a18] hover:bg-[#3b2d28] text-white px-5 py-3 rounded-xl text-sm font-medium transition">
-          + Add New Product
-        </button>
+
       </div>
 
       {/* STATISTICS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-7">
-        {stats.map((item, index) => (
+        {stats.map((item) => (
           <div
-            key={index}
+            key={item.title}
             className="bg-white border border-[#eee8e4] rounded-2xl p-5 hover:shadow-md transition"
           >
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500">{item.title}</p>
+
                 <h2 className="text-2xl font-bold text-[#211a18] mt-3">
                   {item.value}
                 </h2>
@@ -126,10 +182,17 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mt-5">
-              <span className="text-xs font-semibold text-green-700 bg-green-50 px-2 py-1 rounded-md">
-                {item.change}
+            <div className="flex items-center gap-2 mt-5 flex-wrap">
+              <span
+                className={`text-xs font-semibold px-2 py-1 rounded-md ${item.change >= 0
+                  ? "text-green-700 bg-green-50"
+                  : "text-red-700 bg-red-50"
+                  }`}
+              >
+                {item.change >= 0 ? "+" : ""}
+                {item.change}%
               </span>
+
               <span className="text-xs text-gray-400">
                 {item.description}
               </span>
@@ -143,24 +206,31 @@ const Dashboard = () => {
 
         {/* SALES CHART */}
         <div className="xl:col-span-2 bg-white border border-[#eee8e4] rounded-2xl p-5 sm:p-6">
+
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-7">
             <div>
               <h2 className="text-lg font-semibold text-[#211a18]">
                 Sales Analytics
               </h2>
+
               <p className="text-sm text-gray-400 mt-1">
-                Your store's weekly performance
+                Your store's sales performance
               </p>
             </div>
 
-            <select className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none">
-              <option>This Week</option>
-              <option>This Month</option>
-              <option>This Year</option>
+            <select
+              value={selectedPeriod}
+              onChange={handlePeriodChange}
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none"
+            >
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+              <option value="year">This Year</option>
             </select>
           </div>
 
           <div className="flex items-end justify-between gap-2 h-64 border-b border-l border-gray-100 px-2 relative">
+
             {[0, 1, 2, 3, 4].map((item) => (
               <div
                 key={item}
@@ -169,18 +239,24 @@ const Dashboard = () => {
               />
             ))}
 
-            {chartData.map((item, index) => (
+            {dashboardData.chartData.map((item, index) => (
               <div
                 key={item.day}
                 className="relative z-10 flex-1 flex flex-col items-center justify-end h-full gap-2"
               >
                 <div
-                  className={`w-full max-w-12 rounded-t-lg transition-all hover:opacity-80 ${
-                    index === 5 ? "bg-[#a66e58]" : "bg-[#d8b5a5]"
-                  }`}
-                  style={{ height: `${item.value}%` }}
-                  title={`${item.value}%`}
+                  className={`w-full max-w-12 rounded-t-lg transition-all hover:opacity-80 ${index === dashboardData.chartData.length - 1
+                    ? "bg-[#a66e58]"
+                    : "bg-[#d8b5a5]"
+                    }`}
+                  style={{
+                    height: `${(item.value / maxChartValue) * 100
+                      }%`,
+                    minHeight: item.value > 0 ? "4px" : "0px",
+                  }}
+                  title={formatPrice(item.value)}
                 />
+
                 <span className="text-xs text-gray-400 absolute -bottom-7">
                   {item.day}
                 </span>
@@ -188,9 +264,20 @@ const Dashboard = () => {
             ))}
           </div>
 
-          <div className="mt-12 flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-[#a66e58]" />
-            <span className="text-xs text-gray-500">Weekly sales</span>
+          <div className="mt-12 flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-sm bg-[#a66e58]" />
+              <span className="text-xs text-gray-500">Sales Revenue</span>
+            </div>
+
+            <p className="text-sm font-semibold text-[#211a18]">
+              {formatPrice(
+                dashboardData.chartData.reduce(
+                  (sum, item) => sum + item.value,
+                  0
+                )
+              )}
+            </p>
           </div>
         </div>
 
@@ -200,53 +287,67 @@ const Dashboard = () => {
             ORDER OVERVIEW
           </p>
 
-          <h2 className="text-xl font-semibold mt-3">Order Summary</h2>
+          <h2 className="text-xl font-semibold mt-3">
+            Order Summary
+          </h2>
+
           <p className="text-sm text-gray-400 mt-1">
             Current order statistics
           </p>
 
           <div className="mt-8 space-y-6">
-            {[
-              { label: "Completed Orders", value: 845, percent: 85 },
-              { label: "Processing Orders", value: 245, percent: 55 },
-              { label: "Pending Orders", value: 158, percent: 35 },
-            ].map((item) => (
-              <div key={item.label}>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-300">{item.label}</span>
-                  <span className="font-semibold">{item.value}</span>
+            {summaryItems.map((item) => {
+              const percent = summary.total
+                ? (item.value / summary.total) * 100
+                : 0;
+
+              return (
+                <div key={item.label}>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-300">{item.label}</span>
+                    <span className="font-semibold">{item.value}</span>
+                  </div>
+
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#c99883] rounded-full transition-all"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#c99883] rounded-full"
-                    style={{ width: `${item.percent}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <button className="w-full mt-9 border border-white/20 hover:bg-white/10 rounded-xl py-3 text-sm transition">
+          <a
+            href="/admin/orders"
+            className="w-full mt-9 border border-white/20 hover:bg-white/10 rounded-xl py-3 text-sm transition flex items-center justify-center"
+          >
             View All Orders →
-          </button>
+          </a>
         </div>
       </div>
 
       {/* RECENT ORDERS */}
       <div className="bg-white border border-[#eee8e4] rounded-2xl mb-7 overflow-hidden">
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-5 sm:p-6">
           <div>
             <h2 className="text-lg font-semibold text-[#211a18]">
               Recent Orders
             </h2>
+
             <p className="text-sm text-gray-400 mt-1">
               Latest customer orders
             </p>
           </div>
 
-          <button className="text-sm text-[#a66e58] font-semibold hover:text-[#211a18]">
+          <a
+            href="/admin/orders"
+            className="text-sm text-[#a66e58] font-semibold hover:text-[#211a18] transition"
+          >
             View All Orders →
-          </button>
+          </a>
         </div>
 
         <div className="overflow-x-auto">
@@ -263,38 +364,53 @@ const Dashboard = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-[#faf8f6] transition">
+              {dashboardData.recentOrders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="hover:bg-[#faf8f6] transition"
+                >
                   <td className="px-6 py-4 text-sm font-semibold text-[#a66e58]">
-                    {order.id}
+                    #{order.id}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-[#211a18] font-medium">
                     {order.customer}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
+
+                  <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate">
                     {order.product}
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {order.date}
+                    {formatDate(order.date)}
                   </td>
+
                   <td className="px-6 py-4 text-sm font-semibold text-[#211a18]">
-                    {order.amount}
+                    {formatPrice(order.amount)}
                   </td>
+
                   <td className="px-6 py-4">
                     <span
-                      className={`text-xs px-3 py-1.5 rounded-full font-medium ${
-                        order.status === "Delivered"
-                          ? "bg-green-50 text-green-700"
-                          : order.status === "Processing"
-                          ? "bg-blue-50 text-blue-700"
-                          : "bg-yellow-50 text-yellow-700"
-                      }`}
+                      className={`text-xs px-3 py-1.5 rounded-full font-medium capitalize ${getStatusClass(
+                        order.status
+                      )}`}
                     >
-                      {order.status}
+                      {order.status.replaceAll("_", " ")}
                     </span>
                   </td>
                 </tr>
               ))}
+
+              {dashboardData.recentOrders.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-8 text-gray-400 text-sm"
+                  >
+                    No recent orders found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -302,49 +418,59 @@ const Dashboard = () => {
 
       {/* TOP PRODUCTS */}
       <div className="bg-white border border-[#eee8e4] rounded-2xl p-5 sm:p-6">
+
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-[#211a18]">
             Top Selling Products
           </h2>
+
           <p className="text-sm text-gray-400 mt-1">
-            Your most popular jewellery products
+            Your most popular products
           </p>
         </div>
 
         <div className="space-y-5">
-          {products.map((product, index) => (
+          {dashboardData.topProducts.map((product, index) => (
             <div
               key={product.name}
               className="flex items-center justify-between gap-4 border-b border-gray-100 pb-5 last:border-0 last:pb-0"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-[#f4ebe6] flex items-center justify-center text-[#a66e58] font-semibold">
+              <div className="flex items-center gap-4 min-w-0">
+
+                <div className="w-11 h-11 shrink-0 rounded-xl bg-[#f4ebe6] flex items-center justify-center text-[#a66e58] font-semibold">
                   0{index + 1}
                 </div>
 
-                <div>
-                  <h3 className="text-sm font-semibold text-[#211a18]">
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-[#211a18] truncate">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-gray-400 mt-1">
+
+                  <p className="text-xs text-gray-400 mt-1 truncate">
                     {product.category}
                   </p>
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-right shrink-0">
                 <p className="text-sm font-semibold text-[#211a18]">
-                  {product.price}
+                  {formatPrice(product.price)}
                 </p>
+
                 <p className="text-xs text-gray-400 mt-1">
                   {product.sold} sold
                 </p>
               </div>
             </div>
           ))}
+
+          {dashboardData.topProducts.length === 0 && (
+            <p className="text-sm text-center text-gray-400 py-5">
+              No selling products found
+            </p>
+          )}
         </div>
       </div>
-
     </div>
   );
 };

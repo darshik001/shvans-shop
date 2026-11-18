@@ -1,44 +1,24 @@
 
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   FiArrowRight,
   FiTruck,
   FiShield,
   FiRefreshCw,
   FiHeadphones,
-  FiHeart,
   FiShoppingBag,
   FiStar,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
+
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import { AddToCart } from "../toolkit/slices/user/carts";
 
-// const categories = [
-//   {
-//     name: "For Him",
-//     image:
-//       "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85",
-//   },
-//   {
-//     name: "For Her",
-//     image:
-//       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=85",
-//   },
-//   {
-//     name: "Unisex",
-//     image:
-//       "https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=700&q=85",
-//   },
-//   {
-//     name: "Gift Sets",
-//     image:
-//       "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=700&q=85",
-//   },
-// ];
-
-
-
+// Benefits
 const benefits = [
   {
     icon: <FiTruck />,
@@ -97,122 +77,272 @@ const reviews = [
 ];
 
 const Home = () => {
-  const { products } = useSelector((state) => state.userProducts)
-  const { categories } = useSelector((state) => state.common)
-  // console.log(categories)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const { products = [] } = useSelector(
+    (state) => state.userProducts
+  );
+
+  const {
+    categories = [],
+    banners = [],
+  } = useSelector((state) => state.common);
+
+  // Banner slider state
+  const [activeBanner, setActiveBanner] = useState(0);
+
+  // Automatic slider
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActiveBanner((prev) => (prev + 1) % banners.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
+
+  // Reset index if banners change
+  useEffect(() => {
+    setActiveBanner(0);
+  }, [banners.length]);
+
+  // Next banner
+  const nextBanner = () => {
+    setActiveBanner((prev) => (prev + 1) % banners.length);
+  };
+
+  // Previous banner
+  const prevBanner = () => {
+    setActiveBanner(
+      (prev) => (prev - 1 + banners.length) % banners.length
+    );
+  };
+
+  // Add to cart
   const AddToCartData = (cartData) => {
-
-
     dispatch(AddToCart(cartData));
+  };
 
-  }
+  const currentBanner = banners[activeBanner];
+
   return (
     <main className="min-h-screen bg-[#fffdf9] text-[#29231f]">
-     
 
-      {/* Hero Section */}
+      {/* ================= HERO BANNER ================= */}
+
       <section className="relative overflow-hidden bg-[#f6eee5]">
-        <div className="mx-auto grid min-h-[580px] max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 md:grid-cols-2 md:py-16 lg:px-12">
-          <div className="order-2 max-w-xl md:order-1">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[4px] text-[#9a714a] sm:text-sm">
-              The Art of Fragrance
-            </p>
 
-            <h1 className="font-serif text-5xl leading-[1.12] tracking-tight sm:text-6xl lg:text-7xl">
-              A scent that
-              <span className="mt-2 block italic text-[#a77b51]">
-                tells your story.
-              </span>
-            </h1>
+        {banners.length > 0 ? (
+          <div className="relative">
 
-            <p className="mt-6 max-w-md text-sm leading-7 text-[#75685e] sm:text-base">
-              Discover captivating fragrances crafted to express your
-              personality and leave a lasting impression wherever you go.
-            </p>
+            {banners.map((banner, index) => (
+              <div
+                key={banner._id}
+                className={`${activeBanner === index
+                    ? "relative opacity-100"
+                    : "absolute inset-0 pointer-events-none opacity-0"
+                  } transition-opacity duration-700`}
+                aria-hidden={activeBanner !== index}
+              >
+                <div className="mx-auto grid min-h-[580px] max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 md:grid-cols-2 md:py-16 lg:px-12">
 
-            <div className="mt-8 flex flex-wrap gap-4">
+                  {/* Left Content */}
+                  <div className="order-2 max-w-xl md:order-1">
+
+                    <p className="mb-5 text-xs font-semibold uppercase tracking-[4px] text-[#9a714a] sm:text-sm">
+                      The Art of Fragrance
+                    </p>
+
+                    <h1 className="font-serif text-4xl leading-[1.12] tracking-tight sm:text-5xl lg:text-7xl">
+                      {banner.title}
+                    </h1>
+
+                    <p className="mt-6 max-w-md text-sm leading-7 text-[#75685e] sm:text-base">
+                      {banner.description}
+                    </p>
+
+                    <div className="mt-8 flex flex-wrap gap-4">
+
+                      <Link
+                        to="/shop"
+                        className="inline-flex items-center gap-3 bg-[#30241f] px-7 py-4 text-sm font-medium text-white transition hover:bg-[#8d6846]"
+                      >
+                        Explore Fragrances
+                        <FiArrowRight />
+                      </Link>
+
+                      <Link
+                        to="/about"
+                        className="inline-flex items-center gap-2 border border-[#c9b8a6] px-7 py-4 text-sm transition hover:border-[#30241f]"
+                      >
+                        Our Story
+                      </Link>
+
+                    </div>
+
+                    <div className="mt-10 flex items-center gap-4 border-t border-[#dfd0c1] pt-6">
+
+                      <div className="flex -space-x-2">
+                        {["S", "C", "T"].map((letter) => (
+                          <div
+                            key={letter}
+                            className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#f6eee5] bg-[#ddc8b0] text-xs font-semibold text-[#49372b]"
+                          >
+                            {letter}
+                          </div>
+                        ))}
+                      </div>
+
+                      <p className="text-xs leading-5 text-[#75685e]">
+                        Crafted for your identity
+
+                        <span className="block font-medium text-[#30241f]">
+                          A fragrance for every moment
+                        </span>
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  {/* Right Image */}
+                  <div className="relative order-1 mx-auto w-full max-w-lg md:order-2">
+
+                    <div className="absolute -right-3 -top-3 h-28 w-28 border border-[#c8a57f] sm:-right-5 sm:-top-5 sm:h-40 sm:w-40" />
+
+                    <img
+                      src={banner.bannerImage}
+                      alt={banner.imageTitle || banner.title}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      className="relative z-10 h-[350px] w-full object-cover sm:h-[470px] md:h-[520px]"
+                    />
+
+                    <div className="absolute -bottom-5 -left-3 z-20 bg-white px-5 py-4 shadow-lg sm:-left-6 sm:px-7">
+
+                      <p className="font-serif text-xl italic">
+                        {banner.imageTitle}
+                      </p>
+
+                      <p className="mt-1 text-[10px] uppercase tracking-[2px] text-[#9a714a]">
+                        {banner.imageDescription}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            ))}
+
+            {/* Slider Controls */}
+            {banners.length > 1 && (
+              <>
+                {/* Previous */}
+                <button
+                  type="button"
+                  onClick={prevBanner}
+                  aria-label="Previous banner"
+                  className="absolute left-3 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b8a6] bg-white/90 text-[#30241f] shadow-md transition hover:bg-[#30241f] hover:text-white sm:left-6 sm:h-12 sm:w-12"
+                >
+                  <FiChevronLeft size={22} />
+                </button>
+
+                {/* Next */}
+                <button
+                  type="button"
+                  onClick={nextBanner}
+                  aria-label="Next banner"
+                  className="absolute right-3 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c9b8a6] bg-white/90 text-[#30241f] shadow-md transition hover:bg-[#30241f] hover:text-white sm:right-6 sm:h-12 sm:w-12"
+                >
+                  <FiChevronRight size={22} />
+                </button>
+
+                {/* Dots */}
+                <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2">
+
+                  {banners.map((banner, index) => (
+                    <button
+                      key={banner._id}
+                      type="button"
+                      onClick={() => setActiveBanner(index)}
+                      aria-label={`Go to banner ${index + 1}`}
+                      className={`h-2.5 rounded-full transition-all duration-300 ${activeBanner === index
+                          ? "w-8 bg-[#a77b51]"
+                          : "w-2.5 bg-[#c9b8a6] hover:bg-[#a77b51]"
+                        }`}
+                    />
+                  ))}
+
+                </div>
+              </>
+            )}
+
+          </div>
+        ) : (
+          // No banner available
+          <div className="flex min-h-[400px] items-center justify-center px-5 text-center">
+
+            <div>
+              <h1 className="font-serif text-4xl">
+                Welcome to Shvans
+              </h1>
+
+              <p className="mt-4 text-sm text-[#75685e]">
+                Discover your signature fragrance.
+              </p>
+
               <Link
                 to="/shop"
-                className="inline-flex items-center gap-3 bg-[#30241f] px-7 py-4 text-sm font-medium text-white transition hover:bg-[#8d6846]"
+                className="mt-6 inline-flex items-center gap-3 bg-[#30241f] px-7 py-4 text-sm text-white"
               >
-                Explore Fragrances <FiArrowRight />
-              </Link>
-
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 border border-[#c9b8a6] px-7 py-4 text-sm transition hover:border-[#30241f]"
-              >
-                Our Story
+                Explore Fragrances
+                <FiArrowRight />
               </Link>
             </div>
 
-            <div className="mt-10 flex items-center gap-4 border-t border-[#dfd0c1] pt-6">
-              <div className="flex -space-x-2">
-                {["S", "C", "T"].map((letter) => (
-                  <div
-                    key={letter}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#f6eee5] bg-[#ddc8b0] text-xs font-semibold text-[#49372b]"
-                  >
-                    {letter}
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs leading-5 text-[#75685e]">
-                Crafted for your identity
-                <span className="block font-medium text-[#30241f]">
-                  A fragrance for every moment
-                </span>
-              </p>
-            </div>
           </div>
+        )}
 
-          <div className="relative order-1 mx-auto w-full max-w-lg md:order-2">
-            <div className="absolute -right-3 -top-3 h-28 w-28 border border-[#c8a57f] sm:-right-5 sm:-top-5 sm:h-40 sm:w-40" />
-
-            <img
-              src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=90"
-              alt="Luxury perfume collection"
-              className="relative z-10 h-[350px] w-full object-cover sm:h-[470px] md:h-[520px]"
-            />
-
-            <div className="absolute -bottom-5 -left-3 z-20 bg-white px-5 py-4 shadow-lg sm:-left-6 sm:px-7">
-              <p className="font-serif text-xl italic">
-                Wear your essence.
-              </p>
-              <p className="mt-1 text-[10px] uppercase tracking-[2px] text-[#9a714a]">
-                The Shvans Fragrance Collection
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* Benefits */}
+      {/* ================= BENEFITS ================= */}
+
       <section className="border-b border-[#eee5db] bg-white">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-5 py-8 sm:px-8 md:grid-cols-4 lg:px-12">
+
           {benefits.map((item) => (
             <div
               key={item.title}
               className="flex items-center gap-3 sm:justify-center"
             >
-              <span className="text-2xl text-[#a77b51]">{item.icon}</span>
+              <span className="text-2xl text-[#a77b51]">
+                {item.icon}
+              </span>
+
               <div>
-                <h3 className="text-sm font-medium">{item.title}</h3>
+                <h3 className="text-sm font-medium">
+                  {item.title}
+                </h3>
+
                 <p className="mt-1 text-xs text-[#8b7c70]">
                   {item.description}
                 </p>
               </div>
             </div>
           ))}
+
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* ================= FEATURED PRODUCTS ================= */}
+
       <section className="bg-[#f7f1e9]">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+
           <div className="mb-10 text-center">
+
             <p className="mb-3 text-xs uppercase tracking-[3px] text-[#a77b51]">
               Curated for You
             </p>
@@ -225,22 +355,21 @@ const Home = () => {
               Discover distinctive fragrances designed to complement every
               personality, mood, and unforgettable moment.
             </p>
+
           </div>
 
-          {/* 8 Products */}
+          {/* Maximum 8 Products */}
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-            {products.map((product) => (
+
+            {products.slice(0, 8).map((product) => (
               <ProductCard
                 key={product._id}
                 product={product}
                 variants={product.variants}
-                onAddToCart={(cartData) => {
-
-
-                  AddToCartData(cartData);
-                }}
+                onAddToCart={AddToCartData}
               />
             ))}
+
           </div>
 
           <div className="mt-10 text-center">
@@ -248,21 +377,25 @@ const Home = () => {
               to="/products"
               className="inline-flex items-center gap-3 border border-[#30241f] px-8 py-4 text-sm transition hover:bg-[#30241f] hover:text-white"
             >
-              Explore All Fragrances <FiArrowRight />
+              Explore All Fragrances
+              <FiArrowRight />
             </Link>
           </div>
+
         </div>
       </section>
 
+      {/* ================= CATEGORIES ================= */}
 
-
-      {/* Categories */}
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+
         <div className="mb-9 flex items-end justify-between gap-4">
+
           <div>
             <p className="mb-3 text-xs uppercase tracking-[3px] text-[#a77b51]">
               Find Your Fragrance
             </p>
+
             <h2 className="font-serif text-3xl sm:text-4xl">
               Shop by Collection
             </h2>
@@ -272,49 +405,66 @@ const Home = () => {
             to="/shop"
             className="hidden items-center gap-2 text-sm hover:text-[#a77b51] sm:flex"
           >
-            View All <FiArrowRight />
+            View All
+            <FiArrowRight />
           </Link>
+
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+
           {categories.map((category) => (
             <Link
               to="/shop"
-              key={category?._id}
+              key={category._id}
               className="group block"
             >
+
               <div className="overflow-hidden bg-[#f4ece3]">
+
                 <img
                   src={category.categoryImage}
                   alt={category.name}
                   loading="lazy"
                   className="h-52 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
                 />
+
               </div>
 
               <div className="flex items-center justify-between border-b border-[#e9ddd0] py-4">
+
                 <h3 className="font-serif text-lg sm:text-xl">
                   {category.name}
                 </h3>
+
                 <FiArrowRight className="transition group-hover:translate-x-1" />
+
               </div>
+
             </Link>
           ))}
+
         </div>
+
       </section>
 
-      {/* Brand Story */}
+      {/* ================= BRAND STORY ================= */}
+
       <section className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 sm:py-20 md:grid-cols-2 lg:px-12">
+
         <div className="overflow-hidden">
+
           <img
             src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=90"
             alt="Luxury fragrance collection"
             loading="lazy"
             className="h-[350px] w-full object-cover sm:h-[460px]"
           />
+
         </div>
 
         <div className="max-w-xl">
+
           <p className="mb-4 text-xs uppercase tracking-[3px] text-[#a77b51]">
             More Than A Fragrance
           </p>
@@ -327,25 +477,30 @@ const Home = () => {
           </h2>
 
           <p className="mt-6 text-sm leading-7 text-[#817368] sm:text-base">
-            At Shvans, we believe a fragrance is more than just a scent. It is
-            an expression of who you are, a reflection of your mood, and a
-            memory that stays long after the moment has passed.
+            At Shvans, we believe a fragrance is more than just a scent.
+            It is an expression of who you are, a reflection of your mood,
+            and a memory that stays long after the moment has passed.
           </p>
 
           <Link
             to="/about"
             className="mt-8 inline-flex items-center gap-3 border-b border-[#a77b51] pb-2 text-sm font-medium transition hover:gap-5"
           >
-            Discover Our Story <FiArrowRight />
+            Discover Our Story
+            <FiArrowRight />
           </Link>
+
         </div>
+
       </section>
 
+      {/* ================= CUSTOMER REVIEWS ================= */}
 
-      {/* Customer Reviews */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+
           <div className="mb-12 text-center">
+
             <p className="mb-3 text-xs uppercase tracking-[3px] text-[#a77b51]">
               Customer Love
             </p>
@@ -355,18 +510,22 @@ const Home = () => {
             </h2>
 
             <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-[#817368]">
-              Real experiences make every fragrance more special. Discover
-              what customers think about Shvans.
+              Real experiences make every fragrance more special.
+              Discover what customers think about Shvans.
             </p>
+
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+
             {reviews.map((review) => (
               <article
                 key={review.id}
                 className="border border-[#eee5db] bg-[#fffdf9] p-6 transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8"
               >
+
                 <div className="mb-5 flex items-center gap-1 text-[#c18b4f]">
+
                   {Array.from({ length: 5 }).map((_, index) => (
                     <FiStar
                       key={index}
@@ -377,6 +536,7 @@ const Home = () => {
                       }
                     />
                   ))}
+
                 </div>
 
                 <p className="min-h-[100px] text-sm leading-7 text-[#75685e]">
@@ -384,6 +544,7 @@ const Home = () => {
                 </p>
 
                 <div className="mt-7 flex items-center gap-3 border-t border-[#eee5db] pt-5">
+
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#e8d8c6] font-serif text-lg text-[#49372b]">
                     {review.initial}
                   </div>
@@ -392,6 +553,7 @@ const Home = () => {
                     <h3 className="text-sm font-semibold text-[#30241f]">
                       {review.name}
                     </h3>
+
                     <p className="mt-1 text-xs text-[#9b8d80]">
                       {review.location} · {review.date}
                     </p>
@@ -400,16 +562,23 @@ const Home = () => {
                   <span className="ml-auto text-xs text-[#a77b51]">
                     Verified
                   </span>
+
                 </div>
+
               </article>
             ))}
+
           </div>
+
         </div>
       </section>
 
-      {/* Newsletter */}
+      {/* ================= NEWSLETTER ================= */}
+
       <section className="bg-[#30241f] px-5 py-16 text-white sm:py-20">
+
         <div className="mx-auto max-w-2xl text-center">
+
           <p className="mb-4 text-xs uppercase tracking-[3px] text-[#d8b58e]">
             Stay Connected
           </p>
@@ -423,7 +592,11 @@ const Home = () => {
             special offers, and updates from Shvans.
           </p>
 
-          <form className="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row"
+          >
+
             <input
               type="email"
               required
@@ -436,14 +609,20 @@ const Home = () => {
               type="submit"
               className="flex items-center justify-center gap-2 bg-[#d8b58e] px-6 py-4 text-sm font-medium text-[#30241f] transition hover:bg-white"
             >
-              Subscribe <FiArrowRight />
+              Subscribe
+              <FiArrowRight />
             </button>
+
           </form>
+
         </div>
+
       </section>
 
-      {/* Bottom CTA */}
+      {/* ================= BOTTOM CTA ================= */}
+
       <section className="px-5 py-10 text-center">
+
         <FiShoppingBag className="mx-auto mb-3 text-2xl text-[#a77b51]" />
 
         <p className="font-serif text-xl">
@@ -451,12 +630,14 @@ const Home = () => {
         </p>
 
         <Link
-          to="/products"
+          to="/shop"
           className="mt-4 inline-block text-sm underline underline-offset-4 hover:text-[#a77b51]"
         >
           Explore Fragrances
         </Link>
+
       </section>
+
     </main>
   );
 };

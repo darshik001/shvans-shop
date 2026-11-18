@@ -8,11 +8,11 @@ import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
 import { GetAllOrders } from "../toolkit/slices/admin/adminOrder";
 import { GetAnnounc } from "../toolkit/slices/admin/announcements";
 import { GetBanner } from "../toolkit/slices/admin/banner";
+import { GetDashboardReposrt } from "../toolkit/slices/admin/adminreport";
 
 const AdminLayout = () => {
   const dispatch = useDispatch()
   const { isLogin, AccessToken } = useSelector((state) => state.adminAuth)
-  console.log(isLogin)
   useEffect(() => {
     if (isLogin && AccessToken) {
       dispatch(GetCategory())
@@ -21,6 +21,7 @@ const AdminLayout = () => {
       dispatch(GetAllOrders())
       dispatch(GetAnnounc())
       dispatch(GetBanner())
+      dispatch(GetDashboardReposrt())
       clearCategoryMessages()
     }
   }, [isLogin, AccessToken, dispatch])

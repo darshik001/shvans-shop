@@ -23,6 +23,11 @@ import Settings from './components/admin/Settings'
 import OrderList from './components/admin/OrderList'
 import OrderSuccess from './page/OrderSuccess'
 import ContentManagement from './components/admin/ContentManagement'
+import AboutUs from './page/AboutUs'
+import PrivacyPolicy from './page/PrivacyPolicy'
+import TermsConditions from './page/TermsConditions'
+import ReturnPolicy from './page/ReturnPolicy'
+import ContactUs from './page/ContactUs'
 
 function App() {
 
@@ -41,6 +46,13 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path="order-success" element={<OrderSuccess />} />
+
+          <Route path="about" element={<AboutUs />} />
+          <Route path="contact" element={<ContactUs />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<TermsConditions />} />
+          <Route path="return-policy" element={<ReturnPolicy />} />
+
 
         </Route>
 

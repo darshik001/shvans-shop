@@ -7,13 +7,14 @@ export const AddBanner = createAsyncThunk(
     'banner/add',
     async (data, { rejectWithValue, getState }) => {
         try {
+            console.log(data)
             const fromData = new FormData()
             fromData.append('title', data.title)
             fromData.append('description', data.description)
             fromData.append('imageTitle', data.imageTitle)
             fromData.append("imageDescription", data.imageDescription);
             fromData.append("status", data.status);
-            fromData.append("bannerImage", data.image);
+            fromData.append("bannerImage", data.bannerImage);
             const { AccessToken } = getState().adminAuth;
             const resposn = await axios.post(`${APIURL}/admin/banner/add`, fromData, { headers: { Authorization: `Bearer ${AccessToken}` } })
             console.log(resposn.data)
@@ -34,7 +35,6 @@ export const GetBanner = createAsyncThunk(
 
             const { AccessToken } = getState().adminAuth;
             const resposn = await axios.get(`${APIURL}/admin/banner/get`, { headers: { Authorization: `Bearer ${AccessToken}` } })
-            console.log(resposn.data)
             return resposn.data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -48,6 +48,7 @@ export const UpdateBanner = createAsyncThunk(
     'banner/update',
     async (data, { rejectWithValue, getState }) => {
         try {
+
             const fromData = new FormData()
             fromData.append('title', data.title)
             fromData.append('description', data.description)

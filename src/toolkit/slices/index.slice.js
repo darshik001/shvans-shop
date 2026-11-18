@@ -12,6 +12,7 @@ import review from "./user/review"
 import common from "./user/common"
 import announcements from "./admin/announcements"
 import banners from "./admin/banner"
+import report from "./admin/adminreport"
 const rootReducer = combineReducers({
     userAuth: userAuth,
     userProducts: userProducts,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     AdminCoupons: coupons,
     AdminOrder: adminOrder,
     AdminAnnounc: announcements,
-    AdminBanner: banners
+    AdminBanner: banners,
+    AdminReport:report
 });
 
 

@@ -30,11 +30,26 @@ export const GetAnnouncement = createAsyncThunk(
 
 )
 
+export const GetBanner = createAsyncThunk(
+    "common/banner",
+    async (_, { rejectWithValue }) => {
+        try {
+            const resposn = await axios.get(`${APIURL}/user/common/banner`)
+            return resposn.data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+
+    }
+
+) 
+
 const commonSlice = createSlice({
     name: 'common',
     initialState: {
         categories: [],
         announcement: [],
+        banners:[],
         isLoading: false,
     },
 
@@ -63,6 +78,19 @@ const commonSlice = createSlice({
                 state.announcement = action.payload.announcements
             })
             .addCase(GetAnnouncement.rejected, (state, action) => {
+                state.isLoading = false
+            })
+
+            .addCase(GetBanner.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(GetBanner.fulfilled, (state, action) => {
+                state.isLoading = false
+
+                state.banners = action.payload.banners
+            })
+            .addCase(GetBanner.rejected, (state, action) => {
                 state.isLoading = false
             })
     }
