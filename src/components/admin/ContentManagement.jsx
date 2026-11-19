@@ -329,524 +329,524 @@ const ContentManagement = () => {
   return (
     <div className="space-y-6">
 
-        {/* HEADER */}
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-[#211a18]">
-              Content Management
-            </h1>
-            <p className="mt-1 text-sm text-gray-500">
-              Manage announcements and hero banners
-            </p>
-          </div>
-
-          {!showAnnouncementForm && !showBannerForm && (
-            <button
-              onClick={
-                activeTab === "announcement"
-                  ? handleAddAnnouncement
-                  : handleAddBanner
-              }
-              className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
-            >
-              <FiPlus size={18} />
-              Add{" "}
-              {activeTab === "announcement"
-                ? "Announcement"
-                : "Banner"}
-            </button>
-          )}
+      {/* HEADER */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-[#211a18]">
+            Content Management
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage announcements and hero banners
+          </p>
         </div>
 
-        {/* TABS */}
         {!showAnnouncementForm && !showBannerForm && (
-          <>
-            <div className="flex gap-3 border-b border-gray-200">
-              <button
-                onClick={() => handleTabChange("announcement")}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "announcement"
-                  ? "border-[#a77b51] text-[#a77b51]"
-                  : "border-transparent text-gray-500 hover:text-[#211a18]"
-                  }`}
-              >
-                <FiBell size={17} />
-                Announcements
-              </button>
-
-              <button
-                onClick={() => handleTabChange("banner")}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "banner"
-                  ? "border-[#a77b51] text-[#a77b51]"
-                  : "border-transparent text-gray-500 hover:text-[#211a18]"
-                  }`}
-              >
-                <FiImage size={17} />
-                Hero Banners
-              </button>
-            </div>
-
-            {/* SEARCH */}
-            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-              <div className="relative">
-                <FiSearch
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder={
-                    activeTab === "announcement"
-                      ? "Search announcements..."
-                      : "Search banners..."
-                  }
-                  className="w-full rounded-lg border border-gray-200 py-3 pl-11 pr-4 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
-            </div>
-          </>
+          <button
+            onClick={
+              activeTab === "announcement"
+                ? handleAddAnnouncement
+                : handleAddBanner
+            }
+            className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
+          >
+            <FiPlus size={18} />
+            Add{" "}
+            {activeTab === "announcement"
+              ? "Announcement"
+              : "Banner"}
+          </button>
         )}
+      </div>
 
-        {/* ANNOUNCEMENT FORM */}
-        {showAnnouncementForm && (
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-[#211a18]">
-                  {isAnnouncementEdit
-                    ? "Edit Announcement"
-                    : "Add Announcement"}
-                </h2>
+      {/* TABS */}
+      {!showAnnouncementForm && !showBannerForm && (
+        <>
+          <div className="flex gap-3 border-b border-gray-200">
+            <button
+              onClick={() => handleTabChange("announcement")}
+              className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "announcement"
+                ? "border-[#a77b51] text-[#a77b51]"
+                : "border-transparent text-gray-500 hover:text-[#211a18]"
+                }`}
+            >
+              <FiBell size={17} />
+              Announcements
+            </button>
 
-                {isAnnouncementEdit && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    ID: {announcementEditId}
-                  </p>
-                )}
-              </div>
+            <button
+              onClick={() => handleTabChange("banner")}
+              className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "banner"
+                ? "border-[#a77b51] text-[#a77b51]"
+                : "border-transparent text-gray-500 hover:text-[#211a18]"
+                }`}
+            >
+              <FiImage size={17} />
+              Hero Banners
+            </button>
+          </div>
+
+          {/* SEARCH */}
+          <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="relative">
+              <FiSearch
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={
+                  activeTab === "announcement"
+                    ? "Search announcements..."
+                    : "Search banners..."
+                }
+                className="w-full rounded-lg border border-gray-200 py-3 pl-11 pr-4 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ANNOUNCEMENT FORM */}
+      {showAnnouncementForm && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#211a18]">
+                {isAnnouncementEdit
+                  ? "Edit Announcement"
+                  : "Add Announcement"}
+              </h2>
+
+              {isAnnouncementEdit && (
+                <p className="mt-1 text-xs text-gray-500">
+                  ID: {announcementEditId}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={resetAnnouncementForm}
+              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+            >
+              <FiX size={20} />
+            </button>
+          </div>
+
+          <form onSubmit={handleAnnouncementSubmit} className="space-y-5">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Announcement Title *
+              </label>
+
+              <input
+                type="text"
+                name="title"
+                value={announcementForm.title}
+                onChange={handleAnnouncementInput}
+                placeholder="Enter announcement title"
+                required
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Status
+              </label>
+
+              <select
+                name="status"
+                value={announcementForm.status}
+                onChange={handleAnnouncementInput}
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-3 pt-3 sm:flex-row">
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
+              >
+                <FiSave size={17} />
+                {isAnnouncementEdit ? "Update" : "Save"}
+              </button>
 
               <button
                 type="button"
                 onClick={resetAnnouncementForm}
-                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+                className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
               >
-                <FiX size={20} />
+                <FiX size={17} />
+                Cancel
               </button>
             </div>
+          </form>
+        </div>
+      )}
 
-            <form onSubmit={handleAnnouncementSubmit} className="space-y-5">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Announcement Title *
-                </label>
+      {/* ANNOUNCEMENT TABLE */}
+      {!showAnnouncementForm &&
+        !showBannerForm &&
+        activeTab === "announcement" && (
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div className="border-b border-gray-100 px-5 py-4">
+              <h2 className="font-bold text-[#211a18]">
+                Announcement List
+              </h2>
+            </div>
 
-                <input
-                  type="text"
-                  name="title"
-                  value={announcementForm.title}
-                  onChange={handleAnnouncementInput}
-                  placeholder="Enter announcement title"
-                  required
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[650px] text-left">
+                <thead className="bg-[#f8f5f2]">
+                  <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                    <th className="px-5 py-4">Title</th>
+                    <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4">ID</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Status
-                </label>
+                <tbody className="divide-y divide-gray-100">
+                  {filteredAnnouncements.length > 0 ? (
+                    filteredAnnouncements.map((item) => (
+                      <tr key={item._id} className="transition hover:bg-[#faf8f6]">
+                        <td className="px-5 py-4">
+                          <p className="font-semibold text-gray-800">
+                            {item.title}
+                          </p>
+                        </td>
 
-                <select
-                  name="status"
-                  value={announcementForm.status}
-                  onChange={handleAnnouncementInput}
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "active"
+                              ? "bg-green-50 text-green-700"
+                              : "bg-gray-100 text-gray-600"
+                              }`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
 
-              <div className="flex flex-col gap-3 pt-3 sm:flex-row">
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
-                >
-                  <FiSave size={17} />
-                  {isAnnouncementEdit ? "Update" : "Save"}
-                </button>
+                        <td className="max-w-[180px] truncate px-5 py-4 text-xs text-gray-500">
+                          {item._id}
+                        </td>
 
-                <button
-                  type="button"
-                  onClick={resetAnnouncementForm}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
-                >
-                  <FiX size={17} />
-                  Cancel
-                </button>
-              </div>
-            </form>
+                        <td className="px-5 py-4">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => handleEditAnnouncement(item)}
+                              className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
+                              title="Edit"
+                            >
+                              <FiEdit2 size={16} />
+                            </button>
+
+                            <button
+                              onClick={() => handleDeleteAnnouncement(item._id)}
+                              className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100 transition"
+                              title="Delete"
+                            >
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} className="px-5 py-12 text-center text-sm text-gray-400">
+                        No announcements found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
-        {/* ANNOUNCEMENT TABLE */}
-        {!showAnnouncementForm &&
-          !showBannerForm &&
-          activeTab === "announcement" && (
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-100 px-5 py-4">
-                <h2 className="font-bold text-[#211a18]">
-                  Announcement List
-                </h2>
-              </div>
+      {/* BANNER FORM */}
+      {showBannerForm && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#211a18]">
+                {isBannerEdit ? "Edit Hero Banner" : "Add Hero Banner"}
+              </h2>
 
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[650px] text-left">
-                  <thead className="bg-[#f8f5f2]">
-                    <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
-                      <th className="px-5 py-4">Title</th>
-                      <th className="px-5 py-4">Status</th>
-                      <th className="px-5 py-4">ID</th>
-                      <th className="px-5 py-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-gray-100">
-                    {filteredAnnouncements.length > 0 ? (
-                      filteredAnnouncements.map((item) => (
-                        <tr key={item._id} className="transition hover:bg-[#faf8f6]">
-                          <td className="px-5 py-4">
-                            <p className="font-semibold text-gray-800">
-                              {item.title}
-                            </p>
-                          </td>
-
-                          <td className="px-5 py-4">
-                            <span
-                              className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "active"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-gray-100 text-gray-600"
-                                }`}
-                            >
-                              {item.status}
-                            </span>
-                          </td>
-
-                          <td className="max-w-[180px] truncate px-5 py-4 text-xs text-gray-500">
-                            {item._id}
-                          </td>
-
-                          <td className="px-5 py-4">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                onClick={() => handleEditAnnouncement(item)}
-                                className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
-                                title="Edit"
-                              >
-                                <FiEdit2 size={16} />
-                              </button>
-
-                              <button
-                                onClick={() => handleDeleteAnnouncement(item._id)}
-                                className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100 transition"
-                                title="Delete"
-                              >
-                                <FiTrash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="px-5 py-12 text-center text-sm text-gray-400">
-                          No announcements found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+              {isBannerEdit && (
+                <p className="mt-1 text-xs text-gray-500">
+                  ID: {bannerEditId}
+                </p>
+              )}
             </div>
-          )}
 
-        {/* BANNER FORM */}
-        {showBannerForm && (
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-[#211a18]">
-                  {isBannerEdit ? "Edit Hero Banner" : "Add Hero Banner"}
-                </h2>
+            <button
+              type="button"
+              onClick={resetBannerForm}
+              className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+            >
+              <FiX size={20} />
+            </button>
+          </div>
 
-                {isBannerEdit && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    ID: {bannerEditId}
-                  </p>
-                )}
-              </div>
+          <form onSubmit={handleBannerSubmit} className="space-y-5">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Banner Title *
+              </label>
+
+              <input
+                type="text"
+                name="title"
+                value={bannerForm.title}
+                onChange={handleBannerInput}
+                placeholder="Enter banner title"
+                required
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Description
+              </label>
+
+              <textarea
+                name="description"
+                value={bannerForm.description}
+                onChange={handleBannerInput}
+                rows={3}
+                placeholder="Enter description"
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Banner Image
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleBannerImage}
+                className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+              />
+
+              {bannerPreview && (
+                <div className="mt-3">
+                  <img
+                    src={bannerPreview}
+                    alt="Banner preview"
+                    className="h-48 w-full rounded-lg object-cover sm:w-96"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Image Title
+              </label>
+
+              <input
+                type="text"
+                name="imageTitle"
+                value={bannerForm.imageTitle}
+                onChange={handleBannerInput}
+                placeholder="Enter image title"
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Image Description
+              </label>
+
+              <textarea
+                name="imageDescription"
+                value={bannerForm.imageDescription}
+                onChange={handleBannerInput}
+                rows={3}
+                placeholder="Enter image description"
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-[#211a18]">
+                Status
+              </label>
+
+              <select
+                name="status"
+                value={bannerForm.status}
+                onChange={handleBannerInput}
+                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-3 pt-3 sm:flex-row">
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
+              >
+                <FiSave size={17} />
+                {isBannerEdit ? "Update" : "Save"}
+              </button>
 
               <button
                 type="button"
                 onClick={resetBannerForm}
-                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100"
+                className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
               >
-                <FiX size={20} />
+                <FiX size={17} />
+                Cancel
               </button>
             </div>
+          </form>
+        </div>
+      )}
 
-            <form onSubmit={handleBannerSubmit} className="space-y-5">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Banner Title *
-                </label>
+      {/* BANNER TABLE */}
+      {!showAnnouncementForm &&
+        !showBannerForm &&
+        activeTab === "banner" && (
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div className="border-b border-gray-100 px-5 py-4">
+              <h2 className="font-bold text-[#211a18]">
+                Hero Banner List
+              </h2>
+            </div>
 
-                <input
-                  type="text"
-                  name="title"
-                  value={bannerForm.title}
-                  onChange={handleBannerInput}
-                  placeholder="Enter banner title"
-                  required
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1100px] text-left">
+                <thead className="bg-[#f8f5f2]">
+                  <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                    <th className="px-5 py-4">Banner Title</th>
+                    <th className="px-5 py-4">Description</th>
+                    <th className="px-5 py-4">Image</th>
+                    <th className="px-5 py-4">Image Title</th>
+                    <th className="px-5 py-4">Image Description</th>
+                    <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4">ID</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Description
-                </label>
+                <tbody className="divide-y divide-gray-100">
+                  {filteredBanners.length > 0 ? (
+                    filteredBanners.map((item) => (
+                      <tr key={item._id} className="align-top transition hover:bg-[#faf8f6]">
+                        {/* BANNER TITLE */}
+                        <td className="px-5 py-4">
+                          <p className="max-w-[180px] font-semibold text-gray-800">
+                            {item.title || "-"}
+                          </p>
+                        </td>
 
-                <textarea
-                  name="description"
-                  value={bannerForm.description}
-                  onChange={handleBannerInput}
-                  rows={3}
-                  placeholder="Enter description"
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
+                        {/* DESCRIPTION */}
+                        <td className="px-5 py-4">
+                          <p className="max-w-[200px] whitespace-normal text-sm text-gray-600">
+                            {item.description || "-"}
+                          </p>
+                        </td>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Banner Image
-                </label>
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleBannerImage}
-                  className="w-full rounded-lg border border-gray-200 p-3 text-sm"
-                />
-
-                {bannerPreview && (
-                  <div className="mt-3">
-                    <img
-                      src={bannerPreview}
-                      alt="Banner preview"
-                      className="h-48 w-full rounded-lg object-cover sm:w-96"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Image Title
-                </label>
-
-                <input
-                  type="text"
-                  name="imageTitle"
-                  value={bannerForm.imageTitle}
-                  onChange={handleBannerInput}
-                  placeholder="Enter image title"
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Image Description
-                </label>
-
-                <textarea
-                  name="imageDescription"
-                  value={bannerForm.imageDescription}
-                  onChange={handleBannerInput}
-                  rows={3}
-                  placeholder="Enter image description"
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
-                  Status
-                </label>
-
-                <select
-                  name="status"
-                  value={bannerForm.status}
-                  onChange={handleBannerInput}
-                  className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#a77b51]"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-3 pt-3 sm:flex-row">
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
-                >
-                  <FiSave size={17} />
-                  {isBannerEdit ? "Update" : "Save"}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={resetBannerForm}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
-                >
-                  <FiX size={17} />
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* BANNER TABLE */}
-        {!showAnnouncementForm &&
-          !showBannerForm &&
-          activeTab === "banner" && (
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-100 px-5 py-4">
-                <h2 className="font-bold text-[#211a18]">
-                  Hero Banner List
-                </h2>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[1100px] text-left">
-                  <thead className="bg-[#f8f5f2]">
-                    <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
-                      <th className="px-5 py-4">Banner Title</th>
-                      <th className="px-5 py-4">Description</th>
-                      <th className="px-5 py-4">Image</th>
-                      <th className="px-5 py-4">Image Title</th>
-                      <th className="px-5 py-4">Image Description</th>
-                      <th className="px-5 py-4">Status</th>
-                      <th className="px-5 py-4">ID</th>
-                      <th className="px-5 py-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-gray-100">
-                    {filteredBanners.length > 0 ? (
-                      filteredBanners.map((item) => (
-                        <tr key={item._id} className="align-top transition hover:bg-[#faf8f6]">
-                          {/* BANNER TITLE */}
-                          <td className="px-5 py-4">
-                            <p className="max-w-[180px] font-semibold text-gray-800">
-                              {item.title || "-"}
-                            </p>
-                          </td>
-
-                          {/* DESCRIPTION */}
-                          <td className="px-5 py-4">
-                            <p className="max-w-[200px] whitespace-normal text-sm text-gray-600">
-                              {item.description || "-"}
-                            </p>
-                          </td>
-
-                          {/* IMAGE */}
-                          <td className="px-5 py-4">
-                            {item.bannerImage ? (
-                              <img
-                                src={item.bannerImage}
-                                alt={item.imageTitle || item.title || "Banner"}
-                                className="h-14 w-24 rounded-md object-cover"
-                              />
-                            ) : (
-                              <span className="text-xs text-gray-400">
-                                No image
-                              </span>
-                            )}
-                          </td>
-
-                          {/* IMAGE TITLE */}
-                          <td className="px-5 py-4">
-                            <p className="max-w-[180px] whitespace-normal text-sm font-medium text-[#30241f]">
-                              {item.imageTitle || "-"}
-                            </p>
-                          </td>
-
-                          {/* IMAGE DESCRIPTION */}
-                          <td className="px-5 py-4">
-                            <p className="max-w-[240px] whitespace-normal text-sm leading-5 text-gray-600">
-                              {item.imageDescription || "-"}
-                            </p>
-                          </td>
-
-                          {/* STATUS */}
-                          <td className="px-5 py-4">
-                            <span
-                              className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${item.status === "active"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-gray-100 text-gray-600"
-                                }`}
-                            >
-                              {item.status || "inactive"}
+                        {/* IMAGE */}
+                        <td className="px-5 py-4">
+                          {item.bannerImage ? (
+                            <img
+                              src={item.bannerImage}
+                              alt={item.imageTitle || item.title || "Banner"}
+                              className="h-14 w-24 rounded-md object-cover"
+                            />
+                          ) : (
+                            <span className="text-xs text-gray-400">
+                              No image
                             </span>
-                          </td>
+                          )}
+                        </td>
 
-                          {/* ID */}
-                          <td className="max-w-[150px] truncate px-5 py-4 text-xs text-gray-500">
-                            {item._id}
-                          </td>
+                        {/* IMAGE TITLE */}
+                        <td className="px-5 py-4">
+                          <p className="max-w-[180px] whitespace-normal text-sm font-medium text-[#30241f]">
+                            {item.imageTitle || "-"}
+                          </p>
+                        </td>
 
-                          {/* ACTIONS */}
-                          <td className="px-5 py-4">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                onClick={() => handleEditBanner(item)}
-                                className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
-                                title="Edit"
-                              >
-                                <FiEdit2 size={16} />
-                              </button>
+                        {/* IMAGE DESCRIPTION */}
+                        <td className="px-5 py-4">
+                          <p className="max-w-[240px] whitespace-normal text-sm leading-5 text-gray-600">
+                            {item.imageDescription || "-"}
+                          </p>
+                        </td>
 
-                              <button
-                                onClick={() => handleDeleteBanner(item._id)}
-                                className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100"
-                                title="Delete"
-                              >
-                                <FiTrash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={8}
-                          className="px-5 py-12 text-center text-sm text-gray-400"
-                        >
-                          No banners found
+                        {/* STATUS */}
+                        <td className="px-5 py-4">
+                          <span
+                            className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${item.status === "active"
+                              ? "bg-green-50 text-green-700"
+                              : "bg-gray-100 text-gray-600"
+                              }`}
+                          >
+                            {item.status || "inactive"}
+                          </span>
+                        </td>
+
+                        {/* ID */}
+                        <td className="max-w-[150px] truncate px-5 py-4 text-xs text-gray-500">
+                          {item._id}
+                        </td>
+
+                        {/* ACTIONS */}
+                        <td className="px-5 py-4">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => handleEditBanner(item)}
+                              className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
+                              title="Edit"
+                            >
+                              <FiEdit2 size={16} />
+                            </button>
+
+                            <button
+                              onClick={() => handleDeleteBanner(item._id)}
+                              className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100"
+                              title="Delete"
+                            >
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="px-5 py-12 text-center text-sm text-gray-400"
+                      >
+                        No banners found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+        )}
     </div>
   );
 };

@@ -11,7 +11,7 @@ export const AdminSignin = createAsyncThunk(
     "adminauth/login",
     async (data, { rejectWithValue }) => {
         try {
-            console.log(data)
+           
             const deviceToken = await getDeviceToken()
             const respons = await axios.post(`${APIURL}/admin/auth/admin-login`, { ...data, deviceToken })
             return respons.data

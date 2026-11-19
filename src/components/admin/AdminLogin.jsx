@@ -36,12 +36,8 @@ const AdminLogin = () => {
         try {
             setLoading(true);
 
-            // TODO: Connect Admin Login API
-            console.log("Admin Login:", formData);
-            dispatch(AdminSignin(formData))
-            // Successful login:
-            // navigate("/admin/dashboard");
 
+            dispatch(AdminSignin(formData))
         } catch (error) {
             console.log(error);
         }
@@ -53,8 +49,6 @@ const AdminLogin = () => {
 
         try {
             setLoading(true);
-
-            // TODO: Connect Forgot Password API
             console.log("Forgot Password:", formData.email);
 
         } catch (error) {
