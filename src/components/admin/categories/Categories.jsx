@@ -10,13 +10,16 @@ import {
     FiTag,
     FiX,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { clearCategoryMessages } from "../../../toolkit/slices/admin/categories";
 
 
 
 const Categories = () => {
     const navigate = useNavigate();
-    const { categories, isLoading } = useSelector((state) => state.AdminCategories)
+    const dispatch = useDispatch()
+    const { categories, isLoading, successMessage, ErrMessage } = useSelector((state) => state.AdminCategories)
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -68,7 +71,18 @@ const Categories = () => {
 
 
 
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(clearCategoryMessages())
+        }
 
+        if (ErrMessage) {
+            toast.error(ErrMessage)
+            dispatch(clearCategoryMessages())
+        }
+
+    }, [successMessage, ErrMessage, dispatch])
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -83,8 +97,8 @@ const Categories = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate("/admin/categorie-from")}
-                    className="flex items-center gap-2 rounded-lg bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#44332c]"
+                    onClick={() => navigate("/admin/category-form")}
+                    className="flex items-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
                 >
                     <FiPlus size={18} />
                     Add Category
@@ -150,22 +164,22 @@ const Categories = () => {
             </div>
 
             {/* Category Table */}
-            <div className="overflow-hidden rounded-xl border border-[#eee5df] bg-white shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[750px] text-left">
-                        <thead className="bg-[#faf7f4]">
-                            <tr className="text-xs uppercase tracking-wide text-[#8b7770]">
-                                <th className="px-5 py-4 font-semibold">Category</th>
-                                <th className="px-5 py-4 font-semibold">Description</th>
-                                <th className="px-5 py-4 font-semibold">Status</th>
-                                <th className="px-5 py-4 font-semibold">Created At</th>
-                                <th className="px-5 py-4 text-right font-semibold">Actions</th>
+                        <thead className="bg-[#f8f5f2]">
+                            <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                                <th className="px-5 py-4">Category</th>
+                                <th className="px-5 py-4">Description</th>
+                                <th className="px-5 py-4">Status</th>
+                                <th className="px-5 py-4">Created At</th>
+                                <th className="px-5 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
 
-                        <tbody className="divide-y divide-[#f0e9e4]">
+                        <tbody className="divide-y divide-gray-100">
                             {filteredCategories.map((category) => (
-                                <tr key={category._id} className="hover:bg-[#fdfbf9]">
+                                <tr key={category._id} className="transition hover:bg-[#faf8f6]">
                                     <td className="px-5 py-4">
                                         <div className="flex items-center gap-3">
                                             <img

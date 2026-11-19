@@ -62,13 +62,13 @@ const Coupons = () => {
   );
 
   return (
-    <div className="w-full min-h-screen p-4 sm:p-6">
+    <div className="space-y-6">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-[#211a18]">
             Coupons
           </h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -78,7 +78,7 @@ const Coupons = () => {
 
         <button
           onClick={handleAdd}
-          className="flex items-center justify-center gap-2 bg-[#a77b51] hover:bg-[#906843] text-white px-5 py-2.5 rounded-lg transition"
+          className="flex items-center justify-center gap-2 bg-[#211a18] hover:bg-[#3b2d28] text-white px-5 py-3 rounded-xl text-sm font-semibold transition"
         >
           <FiPlus size={18} />
           Add Coupon
@@ -87,7 +87,7 @@ const Coupons = () => {
       </div>
 
       {/* Search */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 mb-5">
+      <div className="bg-white p-4 rounded-xl border border-gray-200 mb-5 shadow-sm">
 
         <div className="relative max-w-md">
           <FiSearch
@@ -100,26 +100,26 @@ const Coupons = () => {
             placeholder="Search coupon code..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 outline-none focus:border-[#a77b51]"
+            className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#a77b51]"
           />
         </div>
 
       </div>
 
       {/* Coupon Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[850px]">
 
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr className="text-sm text-gray-600">
-                <th className="px-5 py-4 font-semibold">Coupon</th>
-                <th className="px-5 py-4 font-semibold">Discount</th>
-                <th className="px-5 py-4 font-semibold">Cart Value</th>
-                <th className="px-5 py-4 font-semibold">Usage Limit</th>
-                <th className="px-5 py-4 font-semibold">Status</th>
-                <th className="px-5 py-4 font-semibold text-center">Actions</th>
+            <thead className="bg-[#f8f5f2]">
+              <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                <th className="px-5 py-4">Coupon</th>
+                <th className="px-5 py-4">Discount</th>
+                <th className="px-5 py-4">Cart Value</th>
+                <th className="px-5 py-4">Usage Limit</th>
+                <th className="px-5 py-4">Status</th>
+                <th className="px-5 py-4 text-center">Actions</th>
               </tr>
             </thead>
 
@@ -129,14 +129,14 @@ const Coupons = () => {
                 filteredCoupons.map((coupon) => (
                   <tr
                     key={coupon._id}
-                    className="hover:bg-gray-50 transition"
+                    className="transition hover:bg-[#faf8f6]"
                   >
 
                     {/* Coupon */}
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
 
-                        <div className="w-10 h-10 rounded-lg bg-[#f8f1ea] flex items-center justify-center text-[#a77b51]">
+                        <div className="w-10 h-10 rounded-lg bg-[#f4ebe6] flex items-center justify-center text-[#a66e58]">
                           <FiTag size={19} />
                         </div>
 
@@ -177,8 +177,8 @@ const Coupons = () => {
                     <td className="px-5 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${coupon.status === "active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-600"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-red-50 text-red-600"
                           }`}
                       >
                         {coupon.status}
@@ -191,7 +191,7 @@ const Coupons = () => {
 
                         <button
                           onClick={() => handleEdit(coupon)}
-                          className="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition"
+                          className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#f4ebe6] text-[#a66e58] hover:bg-[#ecdcd4] transition"
                           title="Edit Coupon"
                         >
                           <FiEdit2 size={17} />

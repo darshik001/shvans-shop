@@ -100,24 +100,21 @@ const CouponForm = () => {
   ]);
 
   return (
-    <div className="w-full min-h-screen p-4 sm:p-6 flex justify-center">
+    <div className="mx-auto max-w-4xl space-y-6">
 
-      {/* Main Wrapper */}
-      <div className="w-full max-w-4xl">
-
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
 
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-[#f8f5f2] transition"
           >
             <FiArrowLeft size={20} />
           </button>
 
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold text-[#211a18]">
               {isEdit ? "Edit Coupon" : "Add Coupon"}
             </h1>
 
@@ -133,7 +130,7 @@ const CouponForm = () => {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl border border-gray-200 p-5 sm:p-7 w-full"
+          className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-7 w-full shadow-sm"
         >
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -314,7 +311,7 @@ const CouponForm = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#a77b51] hover:bg-[#906843] text-white transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#211a18] hover:bg-[#3b2d28] text-white font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
             >
               <FiSave size={18} />
               {isLoading
@@ -329,7 +326,6 @@ const CouponForm = () => {
         </form>
 
       </div>
-    </div>
   );
 };
 

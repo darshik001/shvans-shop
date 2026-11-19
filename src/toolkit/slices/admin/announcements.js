@@ -70,7 +70,12 @@ const announcementsSlice = createSlice({
         errMessage: "",
         successMessage: "",
     },
-
+    reducers: {
+        clearAnnounceMessages: (state) => {
+            state.successMessage = '';
+            state.errMessage = '';
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(AddAnnounc.pending, (state) => {
@@ -98,8 +103,7 @@ const announcementsSlice = createSlice({
             .addCase(GetAnnounc.fulfilled, (state, action) => {
                 state.isLoading = false,
                     state.errMessage = "",
-                    state.successMessage = action.payload.message
-                state.announcements = action.payload.announcements
+                    state.announcements = action.payload.announcements
             })
             .addCase(GetAnnounc.rejected, (state, action) => {
                 state.isLoading = false,
@@ -148,6 +152,7 @@ const announcementsSlice = createSlice({
     }
 
 })
+export const { clearAnnounceMessages } = announcementsSlice.actions;
 
 
 export default announcementsSlice.reducer;

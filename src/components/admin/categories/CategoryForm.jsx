@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiUpload, FiX } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { AddCategory, clearCategoryMessages, UpdateCategory } from "../../../toolkit/slices/admin/categories";
-import { toast } from "react-toastify";
+import { AddCategory, UpdateCategory } from "../../../toolkit/slices/admin/categories";
+
 const CategoryForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const location = useLocation();
-  const { isLoading, successMessage, ErrMessage } = useSelector((state) => state.AdminCategories)
+  const { isLoading } = useSelector((state) => state.AdminCategories)
   const isEdit = location.state?.isEdit || false;
   const category = location.state?.category || null;
 
@@ -99,18 +99,7 @@ const CategoryForm = () => {
 
   };
 
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage)
-      dispatch(clearCategoryMessages())
-    }
 
-    if (ErrMessage) {
-      toast.success(ErrMessage)
-      dispatch(clearCategoryMessages())
-    }
-
-  }, [successMessage, ErrMessage])
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -228,7 +217,7 @@ const CategoryForm = () => {
           <button
             type="button"
             onClick={() => navigate("/admin/categories")}
-            className="rounded-lg border border-[#e8ded8] bg-white px-6 py-3 text-sm font-semibold text-[#55443c]"
+            className="rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
           >
             Cancel
           </button>
@@ -236,7 +225,7 @@ const CategoryForm = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="rounded-lg bg-[#211a18] px-7 py-3 text-sm font-semibold text-white"
+            className="rounded-xl bg-[#211a18] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
           >
             {isEdit ? "Update Category" : "Save Category"}
           </button>

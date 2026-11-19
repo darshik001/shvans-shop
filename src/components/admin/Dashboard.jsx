@@ -140,7 +140,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f6] p-4 sm:p-6 lg:p-8">
+    <div className="space-y-7">
 
       {/* PAGE HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">

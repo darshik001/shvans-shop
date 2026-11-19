@@ -1,5 +1,5 @@
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FiPlus,
   FiEdit2,
@@ -14,11 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   AddAnnounc,
+  clearAnnounceMessages,
   DeleteAnnounc,
   UpdateAnnounc,
 } from "../../toolkit/slices/admin/announcements";
 
-import { AddBanner, DeleteBanner, UpdateBanner } from "../../toolkit/slices/admin/banner";
+import { AddBanner, clearBannerMessages, DeleteBanner, UpdateBanner } from "../../toolkit/slices/admin/banner";
+import { toast } from "react-toastify";
 
 const announcementInitialForm = {
   title: "",
@@ -37,13 +39,10 @@ const bannerInitialForm = {
 const ContentManagement = () => {
   const dispatch = useDispatch();
 
-  const { announcements } = useSelector(
-    (state) => state.AdminAnnounc
-  );
+  const { announcements, successMessage, errMessage } = useSelector((state) => state.AdminAnnounc);
 
-  const { banners } = useSelector(
-    (state) => state.AdminBanner
-  );
+  const { banners } = useSelector((state) => state.AdminBanner);
+  const AdminBanner = useSelector((state) => state.AdminBanner);
 
   const [activeTab, setActiveTab] = useState("announcement");
   const [search, setSearch] = useState("");
@@ -303,14 +302,37 @@ const ContentManagement = () => {
     // Banner Delete API action બનાવ્યા પછી અહીં dispatch કરવો.
   };
 
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage)
+      dispatch(clearAnnounceMessages())
+
+    }
+
+    if (errMessage) {
+      toast.success(errMessage)
+      dispatch(clearAnnounceMessages())
+    }
+
+    if (AdminBanner.successMessage) {
+      toast.success(AdminBanner.successMessage)
+      dispatch(clearBannerMessages())
+    }
+    if (AdminBanner.errMessage) {
+      toast.error(AdminBanner.errMessage)
+      dispatch(clearBannerMessages())
+    }
+
+  }, [successMessage, errMessage, AdminBanner.successMessage, AdminBanner.errMessage, dispatch])
+
   return (
-    <div className="min-h-screen bg-[#f8f1ea] p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
+    <div className="space-y-6">
 
         {/* HEADER */}
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-[#30241f]">
+            <h1 className="text-2xl font-bold text-[#211a18]">
               Content Management
             </h1>
             <p className="mt-1 text-sm text-gray-500">
@@ -325,7 +347,7 @@ const ContentManagement = () => {
                   ? handleAddAnnouncement
                   : handleAddBanner
               }
-              className="flex items-center justify-center gap-2 rounded-lg bg-[#a77b51] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#906843]"
+              className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
             >
               <FiPlus size={18} />
               Add{" "}
@@ -339,12 +361,12 @@ const ContentManagement = () => {
         {/* TABS */}
         {!showAnnouncementForm && !showBannerForm && (
           <>
-            <div className="flex gap-3 border-b border-[#eadfd5]">
+            <div className="flex gap-3 border-b border-gray-200">
               <button
                 onClick={() => handleTabChange("announcement")}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold ${activeTab === "announcement"
+                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "announcement"
                   ? "border-[#a77b51] text-[#a77b51]"
-                  : "border-transparent text-gray-500 hover:text-[#30241f]"
+                  : "border-transparent text-gray-500 hover:text-[#211a18]"
                   }`}
               >
                 <FiBell size={17} />
@@ -353,9 +375,9 @@ const ContentManagement = () => {
 
               <button
                 onClick={() => handleTabChange("banner")}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold ${activeTab === "banner"
+                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "banner"
                   ? "border-[#a77b51] text-[#a77b51]"
-                  : "border-transparent text-gray-500 hover:text-[#30241f]"
+                  : "border-transparent text-gray-500 hover:text-[#211a18]"
                   }`}
               >
                 <FiImage size={17} />
@@ -364,7 +386,7 @@ const ContentManagement = () => {
             </div>
 
             {/* SEARCH */}
-            <div className="rounded-xl border border-[#eadfd5] bg-white p-4 shadow-sm">
+            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
               <div className="relative">
                 <FiSearch
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -389,10 +411,10 @@ const ContentManagement = () => {
 
         {/* ANNOUNCEMENT FORM */}
         {showAnnouncementForm && (
-          <div className="rounded-xl border border-[#eadfd5] bg-white p-5 shadow-sm sm:p-7">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-[#30241f]">
+                <h2 className="text-xl font-bold text-[#211a18]">
                   {isAnnouncementEdit
                     ? "Edit Announcement"
                     : "Add Announcement"}
@@ -416,7 +438,7 @@ const ContentManagement = () => {
 
             <form onSubmit={handleAnnouncementSubmit} className="space-y-5">
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Announcement Title *
                 </label>
 
@@ -432,7 +454,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Status
                 </label>
 
@@ -450,7 +472,7 @@ const ContentManagement = () => {
               <div className="flex flex-col gap-3 pt-3 sm:flex-row">
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 rounded-lg bg-[#a77b51] px-6 py-3 text-sm font-semibold text-white hover:bg-[#906843]"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
                 >
                   <FiSave size={17} />
                   {isAnnouncementEdit ? "Update" : "Save"}
@@ -459,7 +481,7 @@ const ContentManagement = () => {
                 <button
                   type="button"
                   onClick={resetAnnouncementForm}
-                  className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
                 >
                   <FiX size={17} />
                   Cancel
@@ -473,17 +495,17 @@ const ContentManagement = () => {
         {!showAnnouncementForm &&
           !showBannerForm &&
           activeTab === "announcement" && (
-            <div className="overflow-hidden rounded-xl border border-[#eadfd5] bg-white shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
               <div className="border-b border-gray-100 px-5 py-4">
-                <h2 className="font-bold text-[#30241f]">
+                <h2 className="font-bold text-[#211a18]">
                   Announcement List
                 </h2>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[650px] text-left">
-                  <thead className="bg-[#faf7f4]">
-                    <tr className="text-xs uppercase tracking-wider text-gray-500">
+                  <thead className="bg-[#f8f5f2]">
+                    <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
                       <th className="px-5 py-4">Title</th>
                       <th className="px-5 py-4">Status</th>
                       <th className="px-5 py-4">ID</th>
@@ -494,9 +516,9 @@ const ContentManagement = () => {
                   <tbody className="divide-y divide-gray-100">
                     {filteredAnnouncements.length > 0 ? (
                       filteredAnnouncements.map((item) => (
-                        <tr key={item._id} className="hover:bg-[#fdfbf9]">
+                        <tr key={item._id} className="transition hover:bg-[#faf8f6]">
                           <td className="px-5 py-4">
-                            <p className="font-semibold text-[#30241f]">
+                            <p className="font-semibold text-gray-800">
                               {item.title}
                             </p>
                           </td>
@@ -520,7 +542,7 @@ const ContentManagement = () => {
                             <div className="flex justify-end gap-2">
                               <button
                                 onClick={() => handleEditAnnouncement(item)}
-                                className="rounded-lg bg-[#f8f1ea] p-2 text-[#a77b51] hover:bg-[#efe2d5]"
+                                className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
                                 title="Edit"
                               >
                                 <FiEdit2 size={16} />
@@ -528,7 +550,7 @@ const ContentManagement = () => {
 
                               <button
                                 onClick={() => handleDeleteAnnouncement(item._id)}
-                                className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100"
+                                className="rounded-lg bg-red-50 p-2 text-red-500 hover:bg-red-100 transition"
                                 title="Delete"
                               >
                                 <FiTrash2 size={16} />
@@ -552,10 +574,10 @@ const ContentManagement = () => {
 
         {/* BANNER FORM */}
         {showBannerForm && (
-          <div className="rounded-xl border border-[#eadfd5] bg-white p-5 shadow-sm sm:p-7">
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-[#30241f]">
+                <h2 className="text-xl font-bold text-[#211a18]">
                   {isBannerEdit ? "Edit Hero Banner" : "Add Hero Banner"}
                 </h2>
 
@@ -577,7 +599,7 @@ const ContentManagement = () => {
 
             <form onSubmit={handleBannerSubmit} className="space-y-5">
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Banner Title *
                 </label>
 
@@ -593,7 +615,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Description
                 </label>
 
@@ -608,7 +630,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Banner Image
                 </label>
 
@@ -631,7 +653,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Image Title
                 </label>
 
@@ -646,7 +668,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Image Description
                 </label>
 
@@ -661,7 +683,7 @@ const ContentManagement = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#30241f]">
+                <label className="mb-2 block text-sm font-semibold text-[#211a18]">
                   Status
                 </label>
 
@@ -679,7 +701,7 @@ const ContentManagement = () => {
               <div className="flex flex-col gap-3 pt-3 sm:flex-row">
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 rounded-lg bg-[#a77b51] px-6 py-3 text-sm font-semibold text-white hover:bg-[#906843]"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
                 >
                   <FiSave size={17} />
                   {isBannerEdit ? "Update" : "Save"}
@@ -688,7 +710,7 @@ const ContentManagement = () => {
                 <button
                   type="button"
                   onClick={resetBannerForm}
-                  className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
                 >
                   <FiX size={17} />
                   Cancel
@@ -702,17 +724,17 @@ const ContentManagement = () => {
         {!showAnnouncementForm &&
           !showBannerForm &&
           activeTab === "banner" && (
-            <div className="overflow-hidden rounded-xl border border-[#eadfd5] bg-white shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
               <div className="border-b border-gray-100 px-5 py-4">
-                <h2 className="font-bold text-[#30241f]">
+                <h2 className="font-bold text-[#211a18]">
                   Hero Banner List
                 </h2>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[1100px] text-left">
-                  <thead className="bg-[#faf7f4]">
-                    <tr className="text-xs uppercase tracking-wider text-gray-500">
+                  <thead className="bg-[#f8f5f2]">
+                    <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
                       <th className="px-5 py-4">Banner Title</th>
                       <th className="px-5 py-4">Description</th>
                       <th className="px-5 py-4">Image</th>
@@ -727,10 +749,10 @@ const ContentManagement = () => {
                   <tbody className="divide-y divide-gray-100">
                     {filteredBanners.length > 0 ? (
                       filteredBanners.map((item) => (
-                        <tr key={item._id} className="align-top hover:bg-[#fdfbf9]">
+                        <tr key={item._id} className="align-top transition hover:bg-[#faf8f6]">
                           {/* BANNER TITLE */}
                           <td className="px-5 py-4">
-                            <p className="max-w-[180px] font-semibold text-[#30241f]">
+                            <p className="max-w-[180px] font-semibold text-gray-800">
                               {item.title || "-"}
                             </p>
                           </td>
@@ -793,7 +815,7 @@ const ContentManagement = () => {
                             <div className="flex justify-end gap-2">
                               <button
                                 onClick={() => handleEditBanner(item)}
-                                className="rounded-lg bg-[#f8f1ea] p-2 text-[#a77b51] hover:bg-[#efe2d5]"
+                                className="rounded-lg bg-[#f4ebe6] p-2 text-[#a66e58] hover:bg-[#ecdcd4] transition"
                                 title="Edit"
                               >
                                 <FiEdit2 size={16} />
@@ -825,7 +847,6 @@ const ContentManagement = () => {
               </div>
             </div>
           )}
-      </div>
     </div>
   );
 };

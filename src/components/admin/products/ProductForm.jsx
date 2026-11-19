@@ -1,4 +1,4 @@
-﻿
+
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -609,14 +609,14 @@ const ProductForm = () => {
           <button
             type="button"
             onClick={() => navigate("/admin/products")}
-            className="rounded-lg border border-[#e8ded8] bg-white px-6 py-3 text-sm font-semibold text-[#55443c] hover:bg-[#f5efeb]"
+            className="rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-[#f8f5f2] transition"
           >
             Cancel
           </button>
 
           <button
             type="submit"
-            className="rounded-lg bg-[#211a18] px-7 py-3 text-sm font-semibold text-white hover:bg-[#44332c]"
+            className="rounded-xl bg-[#211a18] px-7 py-3 text-sm font-semibold text-white hover:bg-[#3b2d28] transition shadow-sm"
           >
             {isEdit ? (isLoading ? "Updating..." : "Update Product") : (isLoading ? "Saving..." : "Save Product")}
           </button>

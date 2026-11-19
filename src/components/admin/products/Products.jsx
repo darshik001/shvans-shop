@@ -105,7 +105,7 @@ const Products = () => {
 
         <button
           onClick={() => navigate("/admin/product-form")}
-          className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#49362e]"
+          className="flex items-center justify-center gap-2 rounded-xl bg-[#211a18] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b2d28] shadow-sm"
         >
           <FiPlus size={18} />
           Add Product
@@ -211,18 +211,18 @@ const Products = () => {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full min-w-[700px] text-left">
-            <thead className="bg-[#faf7f4]">
-              <tr className="text-xs uppercase tracking-wider text-[#907d72]">
-                <th className="px-6 py-4 font-semibold">Product</th>
-                <th className="px-6 py-4 font-semibold">SKU</th>
-                <th className="px-6 py-4 font-semibold">Category</th>
-                <th className="px-6 py-4 font-semibold">Price</th>
-                <th className="px-6 py-4 font-semibold">Status</th>
-                <th className="px-6 py-4 text-center font-semibold">Actions</th>
+            <thead className="bg-[#f8f5f2]">
+              <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                <th className="px-6 py-4">Product</th>
+                <th className="px-6 py-4">SKU</th>
+                <th className="px-6 py-4">Category</th>
+                <th className="px-6 py-4">Price</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-center">Actions</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-[#f0e9e4]">
+            <tbody className="divide-y divide-gray-100">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => {
                   const firstVariant = product.variants?.[0];
@@ -232,7 +232,7 @@ const Products = () => {
                   return (
                     <tr
                       key={product._id}
-                      className="transition hover:bg-[#fdfbf9]"
+                      className="transition hover:bg-[#faf8f6]"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">

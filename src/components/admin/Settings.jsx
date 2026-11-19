@@ -90,22 +90,19 @@ const Settings = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen p-4 sm:p-6 flex justify-center">
-
-      {/* Width increased from max-w-4xl to max-w-6xl */}
-      <div className="w-full">
+    <div className="space-y-6">
 
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-7">
 
           <div className="flex items-center gap-3">
 
-            <div className="w-12 h-12 rounded-xl bg-[#a77b51]/10 flex items-center justify-center">
-              <FiSettings size={23} className="text-[#a77b51]" />
+            <div className="w-12 h-12 rounded-xl bg-[#f4ebe6] flex items-center justify-center">
+              <FiSettings size={23} className="text-[#a66e58]" />
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 className="text-2xl font-bold text-[#211a18]">
                 Store Settings
               </h1>
 
@@ -119,7 +116,7 @@ const Settings = () => {
           {!isEdit && (
             <button
               onClick={handleEdit}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#a77b51] hover:bg-[#906843] text-white font-medium transition shadow-sm"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#211a18] hover:bg-[#3b2d28] text-white text-sm font-semibold transition shadow-sm"
             >
               <FiEdit2 size={17} />
               Edit Settings
@@ -309,7 +306,7 @@ const Settings = () => {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition"
+                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-[#f8f5f2] transition"
                 >
                   <FiX size={18} />
                   Cancel
@@ -318,7 +315,7 @@ const Settings = () => {
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#a77b51] hover:bg-[#906843] text-white font-medium transition shadow-sm"
+                  className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#211a18] hover:bg-[#3b2d28] text-white font-semibold transition shadow-sm"
                 >
                   <FiSave size={18} />
                   Save Changes
@@ -351,7 +348,6 @@ const Settings = () => {
         </div>
 
       </div>
-    </div>
   );
 };
 

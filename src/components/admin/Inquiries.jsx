@@ -64,13 +64,13 @@ const Inquiries = () => {
     }, [successMessage, errMesage, dispatch]);
 
     return (
-        <div className="p-4 md:p-6 space-y-6">
+        <div className="space-y-6">
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold text-[#211a18]">
                         Inquiries
                     </h1>
 
@@ -79,12 +79,12 @@ const Inquiries = () => {
                     </p>
                 </div>
 
-                <div className="bg-white border border-gray-100 rounded-xl px-5 py-3 shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-xl px-5 py-3 shadow-sm">
                     <p className="text-xs text-gray-500">
                         Total Inquiries
                     </p>
 
-                    <h2 className="text-2xl font-bold text-gray-800">
+                    <h2 className="text-2xl font-bold text-[#211a18]">
                         {inquiryes?.length || 0}
                     </h2>
                 </div>
@@ -92,7 +92,7 @@ const Inquiries = () => {
             </div>
 
             {/* Search & Filter */}
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row gap-3">
+            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col sm:flex-row gap-3">
 
                 <div className="relative flex-1">
 
@@ -103,7 +103,7 @@ const Inquiries = () => {
                         placeholder="Search name, email, phone..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#a66e58] focus:ring-2 focus:ring-[#a66e58]/10 transition"
+                        className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-3 text-sm outline-none focus:border-[#a66e58] focus:ring-2 focus:ring-[#a66e58]/10 transition"
                     />
 
                 </div>
@@ -111,7 +111,7 @@ const Inquiries = () => {
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#a66e58] bg-white cursor-pointer"
+                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#a66e58] bg-white cursor-pointer"
                 >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -121,42 +121,42 @@ const Inquiries = () => {
             </div>
 
             {/* Table */}
-            <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
                 <div className="overflow-x-auto">
 
                     <table className="w-full text-sm text-left border-collapse">
 
                         {/* Table Header */}
-                        <thead className="bg-[#faf8f7]">
+                        <thead className="bg-[#f8f5f2]">
 
-                            <tr className="border-b border-gray-100">
+                            <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold border-b border-gray-100">
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     #
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     Customer
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     Contact
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     Subject
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500">
+                                <th className="px-6 py-4">
                                     Message
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     Date
                                 </th>
 
-                                <th className="px-6 py-4 font-semibold text-gray-500 whitespace-nowrap">
+                                <th className="px-6 py-4 whitespace-nowrap">
                                     Status
                                 </th>
 
@@ -165,7 +165,7 @@ const Inquiries = () => {
                         </thead>
 
                         {/* Table Body */}
-                        <tbody>
+                        <tbody className="divide-y divide-gray-100">
 
                             {filteredInquiries.length > 0 ? (
 
@@ -173,7 +173,7 @@ const Inquiries = () => {
 
                                     <tr
                                         key={item._id || index}
-                                        className="border-b border-gray-100 last:border-0 hover:bg-[#faf8f7]/70 transition-colors"
+                                        className="transition hover:bg-[#faf8f6]"
                                     >
 
                                         {/* Index */}

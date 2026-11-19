@@ -591,7 +591,7 @@ const OrderList = () => {
 
 
     return (
-        <div className="min-h-screen w-full bg-[#faf8f6] p-4 sm:p-6">
+        <div className="space-y-6">
 
             {/* Header */}
             <div className="mb-6">

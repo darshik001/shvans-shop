@@ -100,7 +100,12 @@ const bannerSlice = createSlice({
         errMessage: "",
         successMessage: "",
     },
-
+    reducers: {
+        clearBannerMessages: (state) => {
+            state.successMessage = '';
+            state.errMessage = '';
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(AddBanner.pending, (state) => {
@@ -129,8 +134,7 @@ const bannerSlice = createSlice({
             .addCase(GetBanner.fulfilled, (state, action) => {
                 state.isLoading = false,
                     state.errMessage = "",
-                    state.successMessage = action.payload.message
-                state.banners = action.payload.banners
+                    state.banners = action.payload.banners
             })
             .addCase(GetBanner.rejected, (state, action) => {
                 state.isLoading = false,
@@ -181,5 +185,6 @@ const bannerSlice = createSlice({
 
 })
 
+export const { clearBannerMessages } = bannerSlice.actions;
 
 export default bannerSlice.reducer;

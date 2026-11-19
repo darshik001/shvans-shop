@@ -113,13 +113,13 @@ const RtoAndReturn = () => {
     // };
 
     return (
-        <div className="min-h-screen bg-[#faf8f6] p-4 md:p-6">
+        <div className="space-y-6">
 
             {/* HEADER */}
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold text-[#211a18]">
                         RTO & Return Orders
                     </h1>
                     <p className="text-sm text-gray-500 mt-1">
@@ -162,8 +162,8 @@ const RtoAndReturn = () => {
             <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left min-w-[1000px]">
-                        <thead className="bg-[#faf8f6] border-b border-gray-200">
-                            <tr className="text-xs text-gray-500 uppercase">
+                        <thead className="bg-[#f8f5f2]">
+                            <tr className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
                                 <th className="px-5 py-4">Order Number</th>
                                 <th className="px-5 py-4">Customer</th>
                                 <th className="px-5 py-4">Type</th>

@@ -84,7 +84,7 @@ const AdminLogin = () => {
                         </h1>
 
                         <p className="text-[10px] tracking-[5px] text-[#c99883] mt-2">
-                            JEWELLERY
+                            PERFUME & LUXURY
                         </p>
 
                         <div className="mt-14">
@@ -96,7 +96,7 @@ const AdminLogin = () => {
                             <h2 className="text-4xl md:text-[48px] leading-[1.3] font-light">
                                 Manage your
                                 <br />
-                                jewellery
+                                luxury fragrance
                                 <br />
                                 <span className="text-[#d5a18d] font-semibold">
                                     business.
