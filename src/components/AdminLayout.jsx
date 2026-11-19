@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCategoryMessages, GetCategory } from "../toolkit/slices/admin/categories";
 import { GetProduct } from "../toolkit/slices/admin/products";
 import { GetAllCoupons } from "../toolkit/slices/admin/coupon";
-import { GetAllOrders } from "../toolkit/slices/admin/adminOrder";
+import { GetAllOrders, GetAllRTOAndReturnOrders } from "../toolkit/slices/admin/adminOrder";
 import { GetAnnounc } from "../toolkit/slices/admin/announcements";
 import { GetBanner } from "../toolkit/slices/admin/banner";
 import { GetDashboardReposrt, GetInquiryes } from "../toolkit/slices/admin/adminreport";
@@ -19,6 +19,7 @@ const AdminLayout = () => {
       dispatch(GetProduct())
       dispatch(GetAllCoupons())
       dispatch(GetAllOrders())
+      dispatch(GetAllRTOAndReturnOrders())
       dispatch(GetAnnounc())
       dispatch(GetBanner())
       dispatch(GetDashboardReposrt())

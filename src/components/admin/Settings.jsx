@@ -92,7 +92,8 @@ const Settings = () => {
   return (
     <div className="w-full min-h-screen p-4 sm:p-6 flex justify-center">
 
-      <div className="w-full max-w-4xl">
+      {/* Width increased from max-w-4xl to max-w-6xl */}
+      <div className="w-full">
 
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-7">

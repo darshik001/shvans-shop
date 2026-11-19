@@ -29,6 +29,7 @@ import TermsConditions from './page/TermsConditions'
 import ReturnPolicy from './page/ReturnPolicy'
 import ContactUs from './page/ContactUs'
 import Inquiries from './components/admin/Inquiries'
+import RtoAndReturn from './components/admin/RtoAndReturn'
 
 function App() {
 
@@ -71,6 +72,7 @@ function App() {
             <Route path="coupon-form" element={<CouponForm />} />
             <Route path="settings" element={<Settings />} />
             <Route path="orders" element={<OrderList />} />
+            <Route path="rto-return" element={<RtoAndReturn />} />
             <Route path="content-management" element={<ContentManagement />} />
             <Route path="inquiry" element={<Inquiries />} />
 

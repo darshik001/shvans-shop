@@ -42,6 +42,11 @@ const Sidebar = () => {
       icon: FiShoppingCart,
     },
     {
+      name: "RTO & Return",
+      path: "/admin/rto-return",
+      icon: FiShoppingCart,
+    },
+    {
       name: "Categories",
       path: "/admin/categories",
       icon: FiFolder,
